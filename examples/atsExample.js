@@ -101,6 +101,10 @@ nextValidIdObs.onValue(handleValidOrderId);
 var tickObs = kemitter.filter(isTickPrice);
 tickObs.onValue(printTickPrice);
 
+// Observable for handling server error
+var svrErrorObs = kemitter.filter(isServerError);
+svrErrorObs.onValue(handleServerError);
+
 // Finally, we use kefir's slidingWindow to create a length 3 buffer to trade
 var tradeSignal = tickObs.slidingWindow(3);
 tradeSignal.filter(isBuySignal).onValue(buyOrder);
