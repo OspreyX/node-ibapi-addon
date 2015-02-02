@@ -118,11 +118,11 @@ svrErrorObs.onValue(handleServerError);
 var bidObs = tickObs.filter(isBid);
 var askObs = tickObs.filter(isAsk);
 
+// calculate the midpoint price
 var midPointObs = Kefir.combine([bidObs, askObs], function (bid, ask) {
   return ( bid.price + ask.price ) * 0.5;
 });
 
-// calculate the midpoint price
 var tradeSignal = midPointObs.slidingWindow(3);
 tradeSignal.filter(isBuySignal).onValue(buyOrder);
 tradeSignal.filter(isSellSignal).onValue(sellOrder);
