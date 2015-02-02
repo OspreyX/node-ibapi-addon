@@ -20,12 +20,12 @@ eurusd.currency = 'USD';
 
 var buyOrder = function (data) {
   console.log("Buying EUR");
-  api.placeOrder(orderId, eurusd, "BUY", 100, "MKT", 0.0, 0.0);
+  api.placeSimpleOrder(orderId, eurusd, "BUY", 1000, "MKT", 0.0, 0.0);
   orderId = orderId + 1;
 };
 var sellOrder = function (data) {
   console.log("Selling EUR");
-  api.placeOrder(orderId, eurusd, "SELL", 100, "MKT", 1000.0, 0.0);
+  api.placeSimpleOrder(orderId, eurusd, "SELL", 1000, "MKT", 1000.0, 0.0);
   orderId = orderId + 1;
 };
 var handleValidOrderId = function (data) {
@@ -69,11 +69,14 @@ Object.keys(messageIds).forEach(function (messageId) {
 //       |           
 //       |-->[tickPrices]-->(print it)
 //                 |
-//                 |-->[last three prices]
-//                              |
-//                              |-->(isBuySignal?)-->(buy)
-//                              |
-//                              |-->(isSellSignal?)-->(sell)
+//                 |-->[bid prices]--|
+//                 |                 |-->(midpoint price)
+//                 |-->[ask prices]--|         |
+//                                      [last three prices]
+//                                             |
+//                                             |-->(isBuySignal?)-->(buy)
+//                                             |
+//                                             |-->(isSellSignal?)-->(sell)
 //
 
 // Now, we should write some predicates for data filtering:
@@ -85,6 +88,12 @@ var isServerError = function (data) {
 };
 var isTickPrice = function (data) {
   return data.messageId === messageIds.tickPrice;
+};
+var isBid = function (data) {
+  return data.field === 1;
+};
+var isAsk = function (data) {
+  return data.field === 2;
 };
 var isBuySignal = function (buf) {
   return (buf[2] < buf[1] && buf[1] < buf[0]);
@@ -106,7 +115,15 @@ var svrErrorObs = kemitter.filter(isServerError);
 svrErrorObs.onValue(handleServerError);
 
 // Finally, we use kefir's slidingWindow to create a length 3 buffer to trade
-var tradeSignal = tickObs.slidingWindow(3);
+var bidObs = tickObs.filter(isBid);
+var askObs = tickObs.filter(isAsk);
+
+var midPointObs = Kefir.combine([bidObs, askObs], function (bid, ask) {
+  return ( bid.price + ask.price ) * 0.5;
+});
+
+// calculate the midpoint price
+var tradeSignal = midPointObs.slidingWindow(3);
 tradeSignal.filter(isBuySignal).onValue(buyOrder);
 tradeSignal.filter(isSellSignal).onValue(sellOrder);
 
