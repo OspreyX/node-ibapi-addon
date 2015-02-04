@@ -11,18 +11,19 @@ For direct JavaScript implementation of IB API for Node.js, please visit
 Pilwon Huh's [node-ib] (https://github.com/pilwon/node-ib).
 
 ### Important
-####Note:
+#### Note:
 The inbound messages' are in the order it was received. Also, the outbound 
 messages are rate limited to 50 msg/sec as IB requires it.
 Default behavior is that if your outbound rate is greater than that the 
 51st message will be handled in the next second.
 
-####WARNING:
+#### WARNING:
 If you have legacy code from before 0.2.0, use 0.1.23 if you don't want to 
 migrate your code.
 
 ### Change Notes:
 
+* 2015-02-04 - 0.2.3  - Optional callback for handlers
 * 2015-01-07 - 0.2.2  - More CPU efficient
 * 2014-12-29 - 0.2.1  - Uses event handlers instead of event emitters
 * 2014-11-12 - 0.1.23 - Includes lib into the package itself
@@ -107,7 +108,7 @@ environment variables for Windows.
 // Required package name is 'ibapi' If you use your own project path,
 //  just use require('ibapi') from your project root as you would 
 //  normally do.
-var addon = require('../ibapi'),
+var addon = require('ibapi'),
   messageIds = addon.messageIds,
   contract = addon.contract,
   order = addon.order;
@@ -130,10 +131,13 @@ var handleValidOrderId = function (message) {
   console.log('next order Id is ' + orderId);
 };
 
-var handleServerError = function (message) {
+// Optionally, you can pass the callback from scheduler to control
+//  when your handler is complete.
+var handleServerError = function (message, callback) {
   console.log('Error: ' + message.id.toString() + '-' +
               message.errorCode.toString() + '-' +
               message.errorString.toString());
+  callback();
 };
 
 var handleClientError = function (message) {
@@ -193,10 +197,8 @@ Following commands are used for requesting specific action through IB API:
 .twsConnectionTime() // returns right away
 .reqMktData(reqId, contract, genericTickType, snapShot)
 .cancelMktData(reqId)
-// placeOrder can take either 
-.placeOrder(orderId, contrct, order)
-// or
-.placeOrder(orderId, contract, action, quantity, orderType, price, auxPrice)
+.placeOrder(orderId, contract, order)
+.placeSimpleOrder(orderId, contract, action, quantity, orderType, price, auxPrice)
 .cancelOrder(orderId)
 .reqOpenOrders()
 .reqAccountUpdates(subscribe, acctCode)
@@ -222,7 +224,7 @@ Following commands are used for requesting specific action through IB API:
 .cancelScannerSubscription(tickerId)
 .reqScannerParameters()
 .reqScannerSubscription(tickerId, subscription)
-.reqCurrentTime() // not implemented
+.reqCurrentTime()
 .reqFundamentalData( reqId, contract, reportType )
 .cancelFundamentalData(reqId)
 .calculateImpliedVolatility( reqId, contract, optionPrice, underPrice )
