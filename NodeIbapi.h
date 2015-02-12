@@ -63,7 +63,8 @@ private:
     static Handle<Value> CancelFundamentalData( const Arguments& args );
     static Handle<Value> CalculateImpliedVolatility( const Arguments& args );
     static Handle<Value> CalculateOptionPrice( const Arguments& args );
-    static Handle<Value> CancelCalculateImpliedVolatility( const Arguments& args );
+    static Handle<Value> CancelCalculateImpliedVolatility(
+        const Arguments& args );
     static Handle<Value> CancelCalculateOptionPrice( const Arguments& args );
     static Handle<Value> ReqGlobalCancel( const Arguments& args ); 
     static Handle<Value> ReqMarketDataType( const Arguments& args );
