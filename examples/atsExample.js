@@ -131,4 +131,4 @@ var connected = api.connect('127.0.0.1',7496,0);
 
 if (connected) {
   api.beginProcessing();
-};
+}

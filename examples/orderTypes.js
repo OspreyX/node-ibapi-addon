@@ -116,7 +116,7 @@ var handleOrderStatus = function (message) {
 };
 
 var handleOpenOrder = function (message) {
-  console.log(JSON.stringify(message))
+  console.log(JSON.stringify(message));
 };
 
 var handleExecutions = function (message) {
