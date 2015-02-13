@@ -22,7 +22,7 @@ IbPosixClient::~IbPosixClient()
 }
 
 /////////////////// Custom functions for node access //////////////////////////
-bool IbPosixClient::connect( const char *host, unsigned int port, 
+bool IbPosixClient::connect( const char *host, unsigned int port,
                              int clientId ) {
     bool isConnected = m_pClient->eConnect( host, port, clientId );
     return isConnected;
@@ -53,9 +53,9 @@ void IbPosixClient::processMessages() {
             FD_SET( m_pClient->fd(), &writefds );
 
         FD_CLR( m_pClient->fd(), &errorfds );
-        int ret = select( m_pClient->fd() + 1, &readfds, &writefds, &errorfds, 
+        int ret = select( m_pClient->fd() + 1, &readfds, &writefds, &errorfds,
                           &tval );
-        
+
         if( ret == 0 ) // timeout
             return;
         if( ret < 0 ) // error
@@ -84,7 +84,7 @@ int IbPosixClient::serverVersion() {
 IBString IbPosixClient::TwsConnectionTime() {
     return m_pClient->TwsConnectionTime();
 }
-void IbPosixClient::reqMktData( TickerId tickerId, const Contract &contract, 
+void IbPosixClient::reqMktData( TickerId tickerId, const Contract &contract,
                                 const IBString &genericTick, bool snapShot,
                                 const TagValueListSPtr& mktDataOptions ) {
     m_pClient->reqMktData( tickerId, contract, genericTick, snapShot,
@@ -119,8 +119,8 @@ bool IbPosixClient::checkMessages(){
 void IbPosixClient::reqContractDetails( int reqId, const Contract &contract ) {
     m_pClient->reqContractDetails( reqId, contract );
 }
-void IbPosixClient::reqMktDepth( TickerId tickerId, const Contract &contract, 
-                                 int numRows, 
+void IbPosixClient::reqMktDepth( TickerId tickerId, const Contract &contract,
+                                 int numRows,
                                  const TagValueListSPtr& mktDepthOptions ) {
     m_pClient->reqMktDepth( tickerId, contract, numRows, mktDepthOptions );
 }
@@ -152,29 +152,29 @@ void IbPosixClient::requestFA( faDataType pFaDataType ) {
 void IbPosixClient::replaceFA( faDataType pFaDataType, const IBString& cxml ) {
     m_pClient->replaceFA( pFaDataType, cxml );
 }
-void IbPosixClient::reqHistoricalData( TickerId id, const Contract &contract, 
-                                       const IBString &endDateTime, 
-                                       const IBString &durationStr, 
-                                       const IBString &barSizeSetting, 
-                                       const IBString &whatToShow, 
+void IbPosixClient::reqHistoricalData( TickerId id, const Contract &contract,
+                                       const IBString &endDateTime,
+                                       const IBString &durationStr,
+                                       const IBString &barSizeSetting,
+                                       const IBString &whatToShow,
                                        int useRTH, int formatDate,
                                        const TagValueListSPtr& chartOptions ) {
-    m_pClient->reqHistoricalData( id, contract, endDateTime, durationStr, 
-                                  barSizeSetting, whatToShow, useRTH, 
+    m_pClient->reqHistoricalData( id, contract, endDateTime, durationStr,
+                                  barSizeSetting, whatToShow, useRTH,
                                   formatDate, chartOptions );
 }
-void IbPosixClient::exerciseOptions( TickerId tickerId, 
-                                     const Contract &contract, 
-                                     int exerciseAction, int exerciseQuantity, 
+void IbPosixClient::exerciseOptions( TickerId tickerId,
+                                     const Contract &contract,
+                                     int exerciseAction, int exerciseQuantity,
                                      const IBString &account, int override ) {
-    m_pClient->exerciseOptions( tickerId, contract, exerciseAction, 
+    m_pClient->exerciseOptions( tickerId, contract, exerciseAction,
                                 exerciseQuantity, account, override );
 }
 void IbPosixClient::cancelHistoricalData( TickerId tickerId ) {
     m_pClient->cancelHistoricalData( tickerId );
 }
-void IbPosixClient::reqRealTimeBars( TickerId id, const Contract &contract, 
-                                     int barSize, const IBString &whatToShow, 
+void IbPosixClient::reqRealTimeBars( TickerId id, const Contract &contract,
+                                     int barSize, const IBString &whatToShow,
                                      bool useRTH,
                                      const TagValueListSPtr& realTimeBarsOptions
                                       ) {
@@ -190,7 +190,7 @@ void IbPosixClient::cancelScannerSubscription( int tickerId ) {
 void IbPosixClient::reqScannerParameters() {
     m_pClient->reqScannerParameters();
 }
-void IbPosixClient::reqScannerSubscription( int tickerId, 
+void IbPosixClient::reqScannerSubscription( int tickerId,
                         const ScannerSubscription &subscription,
                         const TagValueListSPtr& scannerSubscriptionOptions ) {
     m_pClient->reqScannerSubscription( tickerId, subscription,
@@ -199,24 +199,24 @@ void IbPosixClient::reqScannerSubscription( int tickerId,
 void IbPosixClient::reqCurrentTime() {
     m_pClient->reqCurrentTime();
 }
-void IbPosixClient::reqFundamentalData( TickerId reqId, 
-                                        const Contract &contract, 
+void IbPosixClient::reqFundamentalData( TickerId reqId,
+                                        const Contract &contract,
                                         const IBString &reportType ) {
     m_pClient->reqFundamentalData( reqId, contract, reportType );
 }
 void IbPosixClient::cancelFundamentalData( TickerId reqId ) {
     m_pClient->cancelFundamentalData( reqId );
 }
-void IbPosixClient::calculateImpliedVolatility( TickerId reqId, 
-                                                const Contract &contract, 
-                                                double optionPrice, 
+void IbPosixClient::calculateImpliedVolatility( TickerId reqId,
+                                                const Contract &contract,
+                                                double optionPrice,
                                                 double underPrice ) {
-    m_pClient->calculateImpliedVolatility( reqId, contract, optionPrice, 
+    m_pClient->calculateImpliedVolatility( reqId, contract, optionPrice,
                                            underPrice );
 }
-void IbPosixClient::calculateOptionPrice( TickerId reqId, 
-                                          const Contract &contract, 
-                                          double volatility, 
+void IbPosixClient::calculateOptionPrice( TickerId reqId,
+                                          const Contract &contract,
+                                          double volatility,
                                           double underPrice ) {
     m_pClient->calculateOptionPrice( reqId, contract, volatility, underPrice );
 }
@@ -238,14 +238,14 @@ void IbPosixClient::reqPositions() {
 void IbPosixClient::cancelPositions() {
     m_pClient->cancelPositions();
 }
-void IbPosixClient::reqAccountSummary( int reqId, const IBString& groupName, 
+void IbPosixClient::reqAccountSummary( int reqId, const IBString& groupName,
                                        const IBString& tags ) {
     m_pClient->reqAccountSummary( reqId, groupName, tags );
 }
 void IbPosixClient::cancelAccountSummary( int reqId ) {
     m_pClient->cancelAccountSummary( reqId );
 }
-void IbPosixClient::verifyRequest( const IBString& apiName, 
+void IbPosixClient::verifyRequest( const IBString& apiName,
                                    const IBString& apiVersion ) {
     m_pClient->verifyRequest( apiName, apiVersion );
 }
@@ -258,7 +258,7 @@ void IbPosixClient::queryDisplayGroups( int reqId ) {
 void IbPosixClient::subscribeToGroupEvents( int reqId, int groupId ) {
     m_pClient->subscribeToGroupEvents( reqId, groupId );
 }
-void IbPosixClient::updateDisplayGroup( int reqId, 
+void IbPosixClient::updateDisplayGroup( int reqId,
                                         const IBString& contractInfo ) {
     m_pClient->updateDisplayGroup( reqId, contractInfo );
 }
@@ -288,11 +288,11 @@ void IbPosixClient::tickSize( TickerId tickerId, TickType field, int size ) {
     this->m_inboundMsgs.push( n );
 }
 // TODO NOT TESTED
-void IbPosixClient::tickOptionComputation( TickerId tickerId, 
-                                           TickType tickType, 
-                                           double impliedVol, double delta, 
-                                           double optPrice, double pvDividend, 
-                                           double gamma, double vega, 
+void IbPosixClient::tickOptionComputation( TickerId tickerId,
+                                           TickType tickType,
+                                           double impliedVol, double delta,
+                                           double optPrice, double pvDividend,
+                                           double gamma, double vega,
                                            double theta, double undPrice ) {
     JSONNode n( JSON_NODE );
     n.push_back( JSONNode( "messageId", "tickOptionComputation" ) );
@@ -309,7 +309,7 @@ void IbPosixClient::tickOptionComputation( TickerId tickerId,
     this->m_inboundMsgs.push( n );
 }
 // TODO NOT TESTED
-void IbPosixClient::tickGeneric( TickerId tickerId, TickType tickType, 
+void IbPosixClient::tickGeneric( TickerId tickerId, TickType tickType,
                                  double value ) {
     JSONNode n( JSON_NODE );
     n.push_back( JSONNode( "messageId", "tickGeneric" ) );
@@ -319,7 +319,7 @@ void IbPosixClient::tickGeneric( TickerId tickerId, TickType tickType,
     this->m_inboundMsgs.push( n );
 }
 // TODO NOT TESTED
-void IbPosixClient::tickString( TickerId tickerId, TickType tickType, 
+void IbPosixClient::tickString( TickerId tickerId, TickType tickType,
                                 const IBString& value ) {
     JSONNode n( JSON_NODE );
     n.push_back( JSONNode( "messageId", "tickString" ) );
@@ -329,12 +329,12 @@ void IbPosixClient::tickString( TickerId tickerId, TickType tickType,
     this->m_inboundMsgs.push( n );
 }
 // TODO NOT TESTED
-void IbPosixClient::tickEFP( TickerId tickerId, TickType tickType, 
-                             double basisPoints, 
-                             const IBString& formattedBasisPoints, 
-                             double totalDividends, int holdDays, 
-                             const IBString& futureExpiry, 
-                             double dividendImpact, 
+void IbPosixClient::tickEFP( TickerId tickerId, TickType tickType,
+                             double basisPoints,
+                             const IBString& formattedBasisPoints,
+                             double totalDividends, int holdDays,
+                             const IBString& futureExpiry,
+                             double dividendImpact,
                              double dividendsToExpiry ) {
     JSONNode n( JSON_NODE );
     n.push_back( JSONNode( "messageId", "tickEFP" ) );
@@ -349,11 +349,10 @@ void IbPosixClient::tickEFP( TickerId tickerId, TickType tickType,
     n.push_back( JSONNode( "dividendsToExpiry", dividendsToExpiry ) );
     this->m_inboundMsgs.push( n );
 }
-// TODO NOT TESTED
-void IbPosixClient::orderStatus( OrderId orderId, const IBString &status, 
-                                 int filled, int remaining, 
+void IbPosixClient::orderStatus( OrderId orderId, const IBString &status,
+                                 int filled, int remaining,
                                  double avgFillPrice, int permId, int parentId,
-                                 double lastFillPrice, int clientId, 
+                                 double lastFillPrice, int clientId,
                                  const IBString& whyHeld ) {
     JSONNode n( JSON_NODE );
     n.push_back( JSONNode( "messageId", "orderStatus" ) );
@@ -371,7 +370,7 @@ void IbPosixClient::orderStatus( OrderId orderId, const IBString &status,
 }
 // No idea how to handle contract and order
 void IbPosixClient::openOrder( OrderId orderId, const Contract& contract,
-                               const Order& order, 
+                               const Order& order,
                                const OrderState& ostate ) {
     JSONNode n( JSON_NODE );
     n.push_back( JSONNode( "messageId", "openOrder" ) );
@@ -398,9 +397,9 @@ void IbPosixClient::connectionClosed() {
     n.push_back( JSONNode( "messageId", "connectionClosed" ) );
     this->m_inboundMsgs.push( n );
 }
-void IbPosixClient::updateAccountValue( const IBString& key, 
+void IbPosixClient::updateAccountValue( const IBString& key,
                                         const IBString& val,
-                                        const IBString& currency, 
+                                        const IBString& currency,
                                         const IBString& accountName ) {
     JSONNode n( JSON_NODE );
     n.push_back( JSONNode( "messageId", "updateAccountValue" ) );
@@ -410,10 +409,10 @@ void IbPosixClient::updateAccountValue( const IBString& key,
     n.push_back( JSONNode( "accountName", accountName ) );
     this->m_inboundMsgs.push( n );
 }
-void IbPosixClient::updatePortfolio( const Contract& contract, int position, 
+void IbPosixClient::updatePortfolio( const Contract& contract, int position,
                                      double marketPrice, double marketValue,
                                      double averageCost, double unrealizedPNL,
-                                     double realizedPNL, 
+                                     double realizedPNL,
                                      const IBString& accountName ) {
     JSONNode n( JSON_NODE );
     n.push_back( JSONNode( "messageId", "updatePortfolio" ) );
@@ -445,7 +444,7 @@ void IbPosixClient::nextValidId( OrderId orderId ) {
     n.push_back( JSONNode( "orderId", orderId ) );
     this->m_inboundMsgs.push( n );
 }
-void IbPosixClient::contractDetails( int reqId, 
+void IbPosixClient::contractDetails( int reqId,
                                      const ContractDetails& contractDetails ) {
     JSONNode n( JSON_NODE );
     n.push_back( JSONNode( "messageId", "contractDetails" ) );
@@ -453,7 +452,7 @@ void IbPosixClient::contractDetails( int reqId,
     n.push_back( jsonifyContractDetails( contractDetails ) );
     this->m_inboundMsgs.push( n );
 }
-void IbPosixClient::bondContractDetails( int reqId, 
+void IbPosixClient::bondContractDetails( int reqId,
                                       const ContractDetails& contractDetails ) {
     JSONNode n( JSON_NODE );
     n.push_back( JSONNode( "messageId", "bondContractDetails" ) );
@@ -467,7 +466,7 @@ void IbPosixClient::contractDetailsEnd( int reqId ) {
     n.push_back( JSONNode( "reqId", reqId ) );
     this->m_inboundMsgs.push( n );
 }
-void IbPosixClient::execDetails( int reqId, const Contract& contract, 
+void IbPosixClient::execDetails( int reqId, const Contract& contract,
                                  const Execution& execution ) {
     JSONNode n( JSON_NODE );
     n.push_back( JSONNode( "messageId", "execDetails" ) );
@@ -482,7 +481,7 @@ void IbPosixClient::execDetailsEnd( int reqId ) {
     n.push_back( JSONNode( "reqId", reqId ) );
     this->m_inboundMsgs.push( n );
 }
-void IbPosixClient::error( const int id, const int errorCode, 
+void IbPosixClient::error( const int id, const int errorCode,
                            const IBString errorString ) {
     JSONNode n( JSON_NODE );
     n.push_back( JSONNode( "messageId", "error" ) );
@@ -493,7 +492,7 @@ void IbPosixClient::error( const int id, const int errorCode,
     if ( id == -1 && errorCode == 1100 )
         disconnect();
 }
-void IbPosixClient::updateMktDepth( TickerId id, int position, int operation, 
+void IbPosixClient::updateMktDepth( TickerId id, int position, int operation,
                                     int side, double price, int size ) {
     JSONNode n( JSON_NODE );
     n.push_back( JSONNode( "messageId", "updateMktDepth" ) );
@@ -505,8 +504,8 @@ void IbPosixClient::updateMktDepth( TickerId id, int position, int operation,
     n.push_back( JSONNode( "size", size ) );
     this->m_inboundMsgs.push( n );
 }
-void IbPosixClient::updateMktDepthL2( TickerId id, int position, 
-                                      IBString marketMaker, int operation, 
+void IbPosixClient::updateMktDepthL2( TickerId id, int position,
+                                      IBString marketMaker, int operation,
                                       int side, double price, int size ) {
     JSONNode n( JSON_NODE );
     n.push_back( JSONNode( "messageId", "updateMktDepthL2" ) );
@@ -519,8 +518,8 @@ void IbPosixClient::updateMktDepthL2( TickerId id, int position,
     n.push_back( JSONNode( "size", size ) );
     this->m_inboundMsgs.push( n );
 }
-void IbPosixClient::updateNewsBulletin( int msgId, int msgType, 
-                                        const IBString& newsMessage, 
+void IbPosixClient::updateNewsBulletin( int msgId, int msgType,
+                                        const IBString& newsMessage,
                                         const IBString& originExch ) {
     JSONNode n( JSON_NODE );
     n.push_back( JSONNode( "messageId", "updateNewsBulletin" ) );
@@ -543,9 +542,9 @@ void IbPosixClient::receiveFA( faDataType pFaDataType, const IBString& cxml ) {
     n.push_back( JSONNode( "cxml", cxml ) );
     this->m_inboundMsgs.push( n );
 }
-void IbPosixClient::historicalData( TickerId reqId, const IBString& date, 
-                                    double open, double high, double low, 
-                                    double close, int volume, int barCount, 
+void IbPosixClient::historicalData( TickerId reqId, const IBString& date,
+                                    double open, double high, double low,
+                                    double close, int volume, int barCount,
                                     double WAP, int hasGaps ) {
     JSONNode n( JSON_NODE );
     n.push_back( JSONNode( "messageId", "historicalData" ) );
@@ -567,11 +566,11 @@ void IbPosixClient::scannerParameters( const IBString &xml ) {
     n.push_back( JSONNode( "xml", xml ) );
     this->m_inboundMsgs.push( n );
 }
-void IbPosixClient::scannerData( int reqId, int rank, 
-                                 const ContractDetails &contractDetails, 
-                                 const IBString &distance, 
-                                 const IBString &benchmark, 
-                                 const IBString &projection, 
+void IbPosixClient::scannerData( int reqId, int rank,
+                                 const ContractDetails &contractDetails,
+                                 const IBString &distance,
+                                 const IBString &benchmark,
+                                 const IBString &projection,
                                  const IBString &legsStr ) {
     JSONNode n( JSON_NODE );
     n.push_back( JSONNode( "messageId", "scannerData" ) );
@@ -590,8 +589,8 @@ void IbPosixClient::scannerDataEnd( int reqId ) {
     n.push_back( JSONNode( "reqId", reqId ) );
     this->m_inboundMsgs.push( n );
 }
-void IbPosixClient::realtimeBar( TickerId reqId, long itime, double open, 
-                                 double high, double low, double close, 
+void IbPosixClient::realtimeBar( TickerId reqId, long itime, double open,
+                                 double high, double low, double close,
                                  long volume, double wap, int count ) {
     JSONNode n( JSON_NODE );
     n.push_back( JSONNode( "messageId", "realtimeBar" ) );
@@ -619,7 +618,7 @@ void IbPosixClient::fundamentalData( TickerId reqId, const IBString& data ) {
     n.push_back( JSONNode( "data", data ) );
     this->m_inboundMsgs.push( n );
 }
-void IbPosixClient::deltaNeutralValidation( int reqId, 
+void IbPosixClient::deltaNeutralValidation( int reqId,
                                             const UnderComp& underComp ) {
     JSONNode n( JSON_NODE );
     n.push_back( JSONNode( "messageId", "deltaNeutralValidation" ) );
@@ -647,7 +646,7 @@ void IbPosixClient::commissionReport(
     n.push_back( jsonifyCommissionReport( commissionReport ) );
     this->m_inboundMsgs.push( n );
 }
-void IbPosixClient::position( const IBString& account, 
+void IbPosixClient::position( const IBString& account,
                               const Contract& contract, int position,
                               double avgCost ) {
     JSONNode n( JSON_NODE );
@@ -663,7 +662,7 @@ void IbPosixClient::positionEnd() {
     n.push_back( JSONNode( "messageId", "positionEnd" ) );
     this->m_inboundMsgs.push( n );
 }
-void IbPosixClient::accountSummary( int reqId, const IBString& account, 
+void IbPosixClient::accountSummary( int reqId, const IBString& account,
                                     const IBString& tag, const IBString& value,
                                     const IBString& curency ) {
     JSONNode n( JSON_NODE );
@@ -687,21 +686,23 @@ void IbPosixClient::verifyMessageAPI( const IBString& apiData ) {
     n.push_back( JSONNode( "apiData", apiData ) );
     this->m_inboundMsgs.push( n );
 }
-void IbPosixClient::verifyCompleted( bool isSuccessful, const IBString& errorText) {
+void IbPosixClient::verifyCompleted( bool isSuccessful,
+                                     const IBString& errorText ) {
     JSONNode n( JSON_NODE );
     n.push_back( JSONNode( "messageId", "verifyCompleted" ) );
     n.push_back( JSONNode( "isSuccessful", isSuccessful ) );
     n.push_back( JSONNode( "errorText", errorText ) );
     this->m_inboundMsgs.push( n );
 }
-void IbPosixClient::displayGroupList( int reqId, const IBString& groups) {
+void IbPosixClient::displayGroupList( int reqId, const IBString& groups ) {
     JSONNode n( JSON_NODE );
     n.push_back( JSONNode( "messageId", "displayGroupList" ) );
     n.push_back( JSONNode( "reqId", reqId ) );
     n.push_back( JSONNode( "groups", groups ) );
     this->m_inboundMsgs.push( n );
 }
-void IbPosixClient::displayGroupUpdated( int reqId, const IBString& contractInfo) {
+void IbPosixClient::displayGroupUpdated( int reqId,
+                                         const IBString& contractInfo ) {
     JSONNode n( JSON_NODE );
     n.push_back( JSONNode( "messageId", "displayGroupUpdated" ) );
     n.push_back( JSONNode( "reqId", reqId ) );
@@ -720,7 +721,8 @@ JSONNode IbPosixClient::getInboundMsg() {
 }
 
 
-JSONNode IbPosixClient::jsonifyContract(std::string name, const Contract& contract) {
+JSONNode IbPosixClient::jsonifyContract( std::string name,
+                                         const Contract& contract ) {
     JSONNode c( JSON_NODE );
     c.set_name( name );
     c.push_back( JSONNode( "conId", contract.conId ) );
@@ -740,7 +742,7 @@ JSONNode IbPosixClient::jsonifyContract(std::string name, const Contract& contra
     c.push_back( JSONNode( "secId", contract.secId ) );
     return c;
 }
-JSONNode IbPosixClient::jsonifyUnderComp(const UnderComp& underComp) {
+JSONNode IbPosixClient::jsonifyUnderComp( const UnderComp& underComp ) {
     JSONNode u( JSON_NODE );
     u.set_name( "underComp" );
     u.push_back( JSONNode( "conId", underComp.conId ) );
@@ -748,7 +750,7 @@ JSONNode IbPosixClient::jsonifyUnderComp(const UnderComp& underComp) {
     u.push_back( JSONNode( "price", underComp.price ) );
     return u;
 }
-JSONNode IbPosixClient::jsonifyContractDetails(const ContractDetails& cd) {
+JSONNode IbPosixClient::jsonifyContractDetails( const ContractDetails& cd ) {
     JSONNode c( JSON_NODE );
     c.set_name( "contractDetails" );
 
@@ -789,7 +791,7 @@ JSONNode IbPosixClient::jsonifyContractDetails(const ContractDetails& cd) {
 
     return c;
 }
-JSONNode IbPosixClient::jsonifyOrder(const Order& order) {
+JSONNode IbPosixClient::jsonifyOrder( const Order& order ) {
     JSONNode o( JSON_NODE );
     o.set_name( "order" );
 
@@ -806,28 +808,29 @@ JSONNode IbPosixClient::jsonifyOrder(const Order& order) {
     o.push_back( JSONNode( "auxPrice", order.auxPrice ) );
 
     // extended order fields
-    o.push_back( JSONNode( "tif", order.tif ) );           // "Time in Force" - DAY, GTC, etc.
-    o.push_back( JSONNode( "activeStartTime", order.activeStartTime ) );   // for GTC orders
-    o.push_back( JSONNode( "activeStopTime", order.activeStopTime ) );    // for GTC orders
-    o.push_back( JSONNode( "ocaGroup", order.ocaGroup ) );      // one cancels all group name
-    o.push_back( JSONNode( "ocaType", order.ocaType ) );       // 1 = CANCEL_WITH_BLOCK, 2 = REDUCE_WITH_BLOCK, 3 = REDUCE_NON_BLOCK
-    o.push_back( JSONNode( "orderRef", order.orderRef ) );      // order reference
-    o.push_back( JSONNode( "transmit", order.transmit ) );      // if false, order will be created but not transmited
-    o.push_back( JSONNode( "parentId", order.parentId ) );      // Parent order Id, to associate Auto STP or TRAIL orders with the original order.
+    o.push_back( JSONNode( "tif", order.tif ) );
+    o.push_back( JSONNode( "activeStartTime", order.activeStartTime ) );
+    o.push_back( JSONNode( "activeStopTime", order.activeStopTime ) );
+    o.push_back( JSONNode( "ocaGroup", order.ocaGroup ) );
+    o.push_back( JSONNode( "ocaType", order.ocaType ) );
+    o.push_back( JSONNode( "orderRef", order.orderRef ) );
+    o.push_back( JSONNode( "transmit", order.transmit ) );
+    o.push_back( JSONNode( "parentId", order.parentId ) );
     o.push_back( JSONNode( "blockOrder", order.blockOrder ) );
     o.push_back( JSONNode( "sweepToFill", order.sweepToFill ) );
     o.push_back( JSONNode( "displaySize", order.displaySize ) );
-    o.push_back( JSONNode( "triggerMethod", order.triggerMethod ) ); // 0=Default, 1=Double_Bid_Ask, 2=Last, 3=Double_Last, 4=Bid_Ask, 7=Last_or_Bid_Ask, 8=Mid-point
+    o.push_back( JSONNode( "triggerMethod", order.triggerMethod ) );
     o.push_back( JSONNode( "outsideRth", order.outsideRth ) );
     o.push_back( JSONNode( "hidden", order.hidden ) );
-    o.push_back( JSONNode( "goodAfterTime", order.goodAfterTime ) );    // Format: 20060505 08:00:00 {time zone}
-    o.push_back( JSONNode( "goodTillDate", order.goodTillDate ) );     // Format: 20060505 08:00:00 {time zone}
-    o.push_back( JSONNode( "rule80A", order.rule80A ) ); // Individual = 'I', Agency = 'A', AgentOtherMember = 'W', IndividualPTIA = 'J', AgencyPTIA = 'U', AgentOtherMemberPTIA = 'M', IndividualPT = 'K', AgencyPT = 'Y', AgentOtherMemberPT = 'N'
+    o.push_back( JSONNode( "goodAfterTime", order.goodAfterTime ) );
+    o.push_back( JSONNode( "goodTillDate", order.goodTillDate ) );
+    o.push_back( JSONNode( "rule80A", order.rule80A ) );
     o.push_back( JSONNode( "allOrNone", order.allOrNone ) );
     o.push_back( JSONNode( "minQty", order.minQty ) );
-    o.push_back( JSONNode( "percentOffset", order.percentOffset ) ); // REL orders only
-    o.push_back( JSONNode( "overridePercentageConstraints", order.overridePercentageConstraints ) );
-    o.push_back( JSONNode( "trailStopPrice", order.trailStopPrice ) ); // TRAILLIMIT orders only
+    o.push_back( JSONNode( "percentOffset", order.percentOffset ) );
+    o.push_back( JSONNode( "overridePercentageConstraints",
+                           order.overridePercentageConstraints ) );
+    o.push_back( JSONNode( "trailStopPrice", order.trailStopPrice ) );
     o.push_back( JSONNode( "trailingPercent", order.trailingPercent ) );
 
     // financial advisors only
@@ -837,10 +840,10 @@ JSONNode IbPosixClient::jsonifyOrder(const Order& order) {
     o.push_back( JSONNode( "faPercentage", order.faPercentage ) );
 
     // institutional (ie non-cleared) only
-    o.push_back( JSONNode( "openClose", order.openClose ) ); // O=Open, C=Close
-    o.push_back( JSONNode( "origin", order.origin ) );    // 0=Customer, 1=Firm
-    o.push_back( JSONNode( "shortSaleSlot", order.shortSaleSlot ) ); // 1 if you hold the shares, 2 if they will be delivered from elsewhere.  Only for Action="SSHORT
-    o.push_back( JSONNode( "designatedLocation", order.designatedLocation ) ); // set when slot=2 only.
+    o.push_back( JSONNode( "openClose", order.openClose ) );
+    o.push_back( JSONNode( "origin", order.origin ) );
+    o.push_back( JSONNode( "shortSaleSlot", order.shortSaleSlot ) );
+    o.push_back( JSONNode( "designatedLocation", order.designatedLocation ) );
     o.push_back( JSONNode( "exemptCode", order.exemptCode ) );
 
     // SMART routing only
@@ -851,7 +854,7 @@ JSONNode IbPosixClient::jsonifyOrder(const Order& order) {
     o.push_back( JSONNode( "optOutSmartRouting", order.optOutSmartRouting ) );
 
     // BOX exchange orders only
-    o.push_back( JSONNode( "auctionStrategy", order.auctionStrategy ) ); // AUCTION_MATCH, AUCTION_IMPROVEMENT, AUCTION_TRANSPARENT
+    o.push_back( JSONNode( "auctionStrategy", order.auctionStrategy ) );
     o.push_back( JSONNode( "startingPrice", order.startingPrice ) );
     o.push_back( JSONNode( "stockRefPrice", order.stockRefPrice ) );
     o.push_back( JSONNode( "delta", order.delta ) );
@@ -862,30 +865,41 @@ JSONNode IbPosixClient::jsonifyOrder(const Order& order) {
 
     // VOLATILITY ORDERS ONLY
     o.push_back( JSONNode( "volatility", order.volatility ) );
-    o.push_back( JSONNode( "volatilityType", order.volatilityType ) );     // 1=daily, 2=annual
-    o.push_back( JSONNode( "deltaNeutralOrderType", order.deltaNeutralOrderType ) );
-    o.push_back( JSONNode( "deltaNeutralAuxPrice", order.deltaNeutralAuxPrice ) );
+    o.push_back( JSONNode( "volatilityType", order.volatilityType ) );
+    o.push_back( JSONNode( "deltaNeutralOrderType",
+                           order.deltaNeutralOrderType ) );
+    o.push_back( JSONNode( "deltaNeutralAuxPrice",
+                           order.deltaNeutralAuxPrice ) );
     o.push_back( JSONNode( "deltaNeutralConId", order.deltaNeutralConId ) );
-    o.push_back( JSONNode( "deltaNeutralSettlingFirm", order.deltaNeutralSettlingFirm ) );
-    o.push_back( JSONNode( "deltaNeutralClearingAccount", order.deltaNeutralClearingAccount ) );
-    o.push_back( JSONNode( "deltaNeutralClearingIntent", order.deltaNeutralClearingIntent ) );
-    o.push_back( JSONNode( "deltaNeutralOpenClose", order.deltaNeutralOpenClose ) );
-    o.push_back( JSONNode( "deltaNeutralShortSale", order.deltaNeutralShortSale ) );
-    o.push_back( JSONNode( "deltaNeutralShortSaleSlot", order.deltaNeutralShortSaleSlot ) );
-    o.push_back( JSONNode( "deltaNeutralDesignatedLocation", order.deltaNeutralDesignatedLocation ) );
+    o.push_back( JSONNode( "deltaNeutralSettlingFirm",
+                           order.deltaNeutralSettlingFirm ) );
+    o.push_back( JSONNode( "deltaNeutralClearingAccount",
+                           order.deltaNeutralClearingAccount ) );
+    o.push_back( JSONNode( "deltaNeutralClearingIntent",
+                           order.deltaNeutralClearingIntent ) );
+    o.push_back( JSONNode( "deltaNeutralOpenClose",
+                           order.deltaNeutralOpenClose ) );
+    o.push_back( JSONNode( "deltaNeutralShortSale",
+                           order.deltaNeutralShortSale ) );
+    o.push_back( JSONNode( "deltaNeutralShortSaleSlot",
+                           order.deltaNeutralShortSaleSlot ) );
+    o.push_back( JSONNode( "deltaNeutralDesignatedLocation",
+                           order.deltaNeutralDesignatedLocation ) );
     o.push_back( JSONNode( "continuousUpdate", order.continuousUpdate ) );
-    o.push_back( JSONNode( "referencePriceType", order.referencePriceType ) ); // 1=Average, 2 = BidOrAsk
+    o.push_back( JSONNode( "referencePriceType", order.referencePriceType ) );
 
     // COMBO ORDERS ONLY
-    o.push_back( JSONNode( "basisPoints", order.basisPoints ) );      // EFP orders only
-    o.push_back( JSONNode( "basisPointsType", order.basisPointsType ) );  // EFP orders only
+    o.push_back( JSONNode( "basisPoints", order.basisPoints ) );
+    o.push_back( JSONNode( "basisPointsType", order.basisPointsType ) );
 
     // SCALE ORDERS ONLY
     o.push_back( JSONNode( "scaleInitLevelSize", order.scaleInitLevelSize ) );
     o.push_back( JSONNode( "scaleSubsLevelSize", order.scaleSubsLevelSize ) );
     o.push_back( JSONNode( "scalePriceIncrement", order.scalePriceIncrement ) );
-    o.push_back( JSONNode( "scalePriceAdjustValue", order.scalePriceAdjustValue ) );
-    o.push_back( JSONNode( "scalePriceAdjustInterval", order.scalePriceAdjustInterval ) );
+    o.push_back( JSONNode( "scalePriceAdjustValue",
+                           order.scalePriceAdjustValue ) );
+    o.push_back( JSONNode( "scalePriceAdjustInterval",
+                           order.scalePriceAdjustInterval ) );
     o.push_back( JSONNode( "scaleProfitOffset", order.scaleProfitOffset ) );
     o.push_back( JSONNode( "scaleAutoReset", order.scaleAutoReset ) );
     o.push_back( JSONNode( "scaleInitPosition", order.scaleInitPosition ) );
@@ -894,15 +908,15 @@ JSONNode IbPosixClient::jsonifyOrder(const Order& order) {
     o.push_back( JSONNode( "scaleTable", order.scaleTable ) );
 
     // HEDGE ORDERS
-    o.push_back( JSONNode( "hedgeType", order.hedgeType ) );  // 'D' - delta, 'B' - beta, 'F' - FX, 'P' - pair
-    o.push_back( JSONNode( "hedgeParam", order.hedgeParam ) ); // 'beta=X' value for beta hedge, 'ratio=Y' for pair hedge
+    o.push_back( JSONNode( "hedgeType", order.hedgeType ) );
+    o.push_back( JSONNode( "hedgeParam", order.hedgeParam ) );
 
     // Clearing info
-    o.push_back( JSONNode( "account", order.account ) ); // IB account
+    o.push_back( JSONNode( "account", order.account ) );
     o.push_back( JSONNode( "settlingFirm", order.settlingFirm ) );
-    o.push_back( JSONNode( "clearingAccount", order.clearingAccount ) ); // True beneficiary of the order
-    o.push_back( JSONNode( "clearingIntent", order.clearingIntent ) ); // "" (Default), "IB", "Away", "PTA" (PostTrade)
- 
+    o.push_back( JSONNode( "clearingAccount", order.clearingAccount ) );
+    o.push_back( JSONNode( "clearingIntent", order.clearingIntent ) );
+
     return o;
 }
 JSONNode IbPosixClient::jsonifyOrderState(const OrderState& ostate) {

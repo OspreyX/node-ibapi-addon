@@ -12,7 +12,7 @@ var api = new addon.NodeIbapi();
 var requestToInstrument={
     1:"EURUSD",
     2:"GBPUSD"
-}
+};
 
 var eurusd = contract.createContract();
 eurusd.symbol = 'EUR';

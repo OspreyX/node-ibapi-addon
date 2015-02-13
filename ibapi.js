@@ -19,7 +19,7 @@ function NodeIbapi() {
 NodeIbapi.prototype = {
 
   _consumeMessages: function () {
-    async.forever( this.processMessage.bind(this),
+    async.forever( this._processMessage.bind(this),
       function(err) {
         console.error(err);
         throw err;
@@ -27,27 +27,27 @@ NodeIbapi.prototype = {
     );
   },
 
-  processMessage: function (next) {
+  _processMessage: function (next) {
     this.client.checkMessages();
     this.client.processMsg();
     var message = this.client.getInboundMsg();
     if (message.messageId in this.handlers) {
       var handler = this.handlers[message.messageId];
       handler(message);
-    };
+    }
     if (!this.client.isConnected()) {
       message = {};
       message.messageId = 'disconnected';
       if (message.messageId in this.handlers) {
-        var handler = this.handlers[message.messageId];
-        handler(message);
-      };
-    };
+        var dcHandler = this.handlers[message.messageId];
+        dcHandler(message);
+      }
+    }
     setTimeout(next,0);
   },
 
   connect: function (host, port, clientId) {
-    return this.client.connect(host, port, clientId)
+    return this.client.connect(host, port, clientId);
   },
 
   beginProcessing: function () {

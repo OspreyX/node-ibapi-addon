@@ -22,11 +22,10 @@ void NodeIbapi::Init( Handle<Object> exports ) {
     tpl->InstanceTemplate()->SetInternalFieldCount( 1 );
 
     // prototype
-    // TODO need to write test, not sure what would be a good one..a
     tpl->PrototypeTemplate()->Set( String::NewSymbol( "processMsg" ),
         FunctionTemplate::New( ProcessMsg )->GetFunction() );
     /// getters
-    tpl->PrototypeTemplate()->Set( String::NewSymbol( "getInboundMsg" ), 
+    tpl->PrototypeTemplate()->Set( String::NewSymbol( "getInboundMsg" ),
         FunctionTemplate::New( GetInboundMsg )->GetFunction() );
 
     /// EClientSocket
@@ -95,7 +94,7 @@ void NodeIbapi::Init( Handle<Object> exports ) {
         FunctionTemplate::New( CancelScannerSubscription )->GetFunction() );
     tpl->PrototypeTemplate()->Set( String::NewSymbol( "reqScannerParameters" ),
         FunctionTemplate::New( ReqScannerParameters )->GetFunction() );
-    tpl->PrototypeTemplate()->Set( 
+    tpl->PrototypeTemplate()->Set(
         String::NewSymbol( "reqScannerSubscription" ),
         FunctionTemplate::New( ReqScannerSubscription )->GetFunction() );
     tpl->PrototypeTemplate()->Set( String::NewSymbol( "reqCurrentTime" ),
@@ -104,16 +103,16 @@ void NodeIbapi::Init( Handle<Object> exports ) {
         FunctionTemplate::New( ReqFundamentalData )->GetFunction() );
     tpl->PrototypeTemplate()->Set( String::NewSymbol( "cancelFundamentalData" ),
         FunctionTemplate::New( CancelFundamentalData )->GetFunction() );
-    tpl->PrototypeTemplate()->Set( 
+    tpl->PrototypeTemplate()->Set(
         String::NewSymbol( "calculateImpliedVolatility" ),
         FunctionTemplate::New( CalculateImpliedVolatility )->GetFunction() );
     tpl->PrototypeTemplate()->Set( String::NewSymbol( "calculateOptionPrice" ),
         FunctionTemplate::New( CalculateOptionPrice )->GetFunction() );
-    tpl->PrototypeTemplate()->Set( 
+    tpl->PrototypeTemplate()->Set(
         String::NewSymbol( "cancelCalculateImpliedVolatility" ),
         FunctionTemplate::
             New( CancelCalculateImpliedVolatility )->GetFunction() );
-    tpl->PrototypeTemplate()->Set( 
+    tpl->PrototypeTemplate()->Set(
         String::NewSymbol( "cancelCalculateOptionPrice" ),
         FunctionTemplate::New( CancelCalculateOptionPrice )->GetFunction() );
     tpl->PrototypeTemplate()->Set( String::NewSymbol( "reqGlobalCancel" ),
@@ -134,15 +133,16 @@ void NodeIbapi::Init( Handle<Object> exports ) {
         FunctionTemplate::New( VerifyMessage )->GetFunction() );
     tpl->PrototypeTemplate()->Set( String::NewSymbol( "queryDisplayGroups" ),
         FunctionTemplate::New( QueryDisplayGroups )->GetFunction() );
-    tpl->PrototypeTemplate()->Set( String::NewSymbol( "subscribeToGroupEvents" ),
+    tpl->PrototypeTemplate()->Set(
+        String::NewSymbol( "subscribeToGroupEvents" ),
         FunctionTemplate::New( SubscribeToGroupEvents )->GetFunction() );
     tpl->PrototypeTemplate()->Set( String::NewSymbol( "updateDisplayGroup" ),
         FunctionTemplate::New( UpdateDisplayGroup )->GetFunction() );
-    tpl->PrototypeTemplate()->Set( String::NewSymbol( "unsubscribeFromGroupEvents" ),
+    tpl->PrototypeTemplate()->Set(
+        String::NewSymbol( "unsubscribeFromGroupEvents" ),
         FunctionTemplate::New( UnsubscribeFromGroupEvents )->GetFunction() );
 
-    //
-    Persistent<Function> constructor = 
+    Persistent<Function> constructor =
         Persistent<Function>::New( tpl->GetFunction() );
     exports->Set( String::NewSymbol( "NodeIbapi" ), constructor );
 }
@@ -173,7 +173,6 @@ Handle<Value> NodeIbapi::Connect( const Arguments &args ) {
     return scope.Close( Boolean::New( conn ) );
 }
 
-// TODO disconnect method should return something
 Handle<Value> NodeIbapi::Disconnect( const Arguments &args ) {
     HandleScope scope;
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.This() );
@@ -208,8 +207,8 @@ Handle<Value> NodeIbapi::TwsConnectionTime( const Arguments& args ) {
     HandleScope scope;
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.This() );
 
-    return scope.Close( String::New( 
-                                obj->m_client.TwsConnectionTime().c_str() ) );
+    return scope.Close(
+        String::New( obj->m_client.TwsConnectionTime().c_str() ) );
 }
 Handle<Value> NodeIbapi::ReqMktData( const Arguments &args ) {
     HandleScope scope;
@@ -221,7 +220,7 @@ Handle<Value> NodeIbapi::ReqMktData( const Arguments &args ) {
 
     TickerId tickerId = args[0]->Int32Value();
     Contract contract;
- 
+
     Handle<Object> ibContract = Handle<Object>::Cast( args[1] );
     convertContractForIb( ibContract, contract ); 
 
@@ -231,7 +230,7 @@ Handle<Value> NodeIbapi::ReqMktData( const Arguments &args ) {
 
     TagValueListSPtr mktDataOptions;
 
-    obj->m_client.reqMktData( tickerId, contract, genericTick, snapShot, 
+    obj->m_client.reqMktData( tickerId, contract, genericTick, snapShot,
                               mktDataOptions );
     return scope.Close( Undefined() );
 }
@@ -239,8 +238,8 @@ Handle<Value> NodeIbapi::CancelMktData( const Arguments &args ) {
     HandleScope scope;
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.This() );
 
-    if ( isWrongArgNumber( args, 1 ) || 
-        isWrongType( !args[0]->IsUint32(), 0 ) ) {
+    if ( isWrongArgNumber( args, 1 ) ||
+         isWrongType( !args[0]->IsUint32(), 0 ) ) {
         return scope.Close( Undefined() );
     }
 
@@ -268,7 +267,7 @@ Handle<Value> NodeIbapi::PlaceOrder( const Arguments &args ) {
     orderId = args[0]->Int32Value();
 
     Handle<Object> ibContract = Handle<Object>::Cast( args[1] );
-    convertContractForIb( ibContract, contract ); 
+    convertContractForIb( ibContract, contract );
 
     if ( args.Length() == 7 ) {
         if ( isWrongType( !args[2]->IsString(), 2 ) )
@@ -294,7 +293,7 @@ Handle<Value> NodeIbapi::PlaceOrder( const Arguments &args ) {
 Handle<Value> NodeIbapi::CancelOrder( const Arguments &args ) {
     HandleScope scope;
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.This() );
-    if ( isWrongArgNumber( args, 1 ) || 
+    if ( isWrongArgNumber( args, 1 ) ||
          isWrongType( !args[0]->IsUint32(), 0 ) ) {
         return scope.Close( Undefined() );
     }
@@ -310,8 +309,8 @@ Handle<Value> NodeIbapi::ReqOpenOrders( const Arguments &args ) {
 Handle<Value> NodeIbapi::ReqAccountUpdates( const Arguments &args ) {
     HandleScope scope;
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.This() );
-    if ( isWrongArgNumber( args, 2 ) || 
-         isWrongType( !args[0]->IsBoolean(), 0 ) || 
+    if ( isWrongArgNumber( args, 2 ) ||
+         isWrongType( !args[0]->IsBoolean(), 0 ) ||
          isWrongType( !args[1]->IsString(), 1 ) ) {
         return scope.Close( Undefined() );
     }
@@ -369,7 +368,7 @@ Handle<Value> NodeIbapi::ReqContractDetails( const Arguments &args ) {
 
     reqId = args[0]->Int32Value();
     Handle<Object> ibContract = Handle<Object>::Cast( args[1] );
-    convertContractForIb( ibContract, contract ); 
+    convertContractForIb( ibContract, contract );
 
     obj->m_client.reqContractDetails( reqId, contract );
     return scope.Close( Undefined() );
@@ -384,9 +383,9 @@ Handle<Value> NodeIbapi::ReqMktDepth( const Arguments &args ) {
 
     TickerId tickerId = args[0]->Int32Value();
     Contract contract;
- 
+
     Handle<Object> ibContract = Handle<Object>::Cast( args[1] );
-    convertContractForIb( ibContract, contract ); 
+    convertContractForIb( ibContract, contract );
 
     int numRows = args[2]->Int32Value();
 
@@ -398,7 +397,7 @@ Handle<Value> NodeIbapi::ReqMktDepth( const Arguments &args ) {
 Handle<Value> NodeIbapi::CancelMktDepth( const Arguments &args ) {
     HandleScope scope;
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.This() );
-    
+
     if ( isWrongArgNumber( args, 1 ) ) {
         return scope.Close( Undefined() );
     }
@@ -498,15 +497,15 @@ Handle<Value> NodeIbapi::ReqHistoricalData( const Arguments &args ) {
 
     TagValueListSPtr chartOptions;
 
-    obj->m_client.reqHistoricalData( id, contract, endDateTime, durationStr, 
-                                     barSizeSetting, whatToShow, useRTH, 
+    obj->m_client.reqHistoricalData( id, contract, endDateTime, durationStr,
+                                     barSizeSetting, whatToShow, useRTH,
                                      formatDate, chartOptions );
     return scope.Close( Undefined() );
 }
 Handle<Value> NodeIbapi::ExerciseOptions( const Arguments &args ) {
     HandleScope scope;
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.This() );
-    
+
     if ( isWrongArgNumber( args, 6 ) ) {
         return scope.Close( Undefined() );
     }
@@ -526,7 +525,7 @@ Handle<Value> NodeIbapi::ExerciseOptions( const Arguments &args ) {
     account = getChar( args[4] );
     override = args[5]->Int32Value();
 
-    obj->m_client.exerciseOptions( tickerId, contract, exerciseAction, 
+    obj->m_client.exerciseOptions( tickerId, contract, exerciseAction,
                                    exerciseQuantity, account, override );
 
     return scope.Close( Undefined() );
@@ -550,7 +549,7 @@ Handle<Value> NodeIbapi::ReqRealTimeBars( const Arguments &args ) {
 
     TickerId tickerId = args[0]->Int32Value();
     Contract contract;
- 
+
     Handle<Object> ibContract = Handle<Object>::Cast( args[1] );
     convertContractForIb( ibContract, contract );
 
@@ -559,7 +558,7 @@ Handle<Value> NodeIbapi::ReqRealTimeBars( const Arguments &args ) {
     bool useRTH = args[4]->BooleanValue();
 
     TagValueListSPtr realTimeBarsOptions;
-    obj->m_client.reqRealTimeBars( tickerId, contract, barSize, whatToShow, 
+    obj->m_client.reqRealTimeBars( tickerId, contract, barSize, whatToShow,
                                    useRTH, realTimeBarsOptions );
     return scope.Close( Undefined() );
 }
@@ -667,7 +666,7 @@ Handle<Value> NodeIbapi::CalculateImpliedVolatility( const Arguments &args ) {
     double optionPrice = args[2]->NumberValue();
     double underPrice = args[3]->NumberValue();
 
-    obj->m_client.calculateImpliedVolatility( reqId, contract, optionPrice, 
+    obj->m_client.calculateImpliedVolatility( reqId, contract, optionPrice,
                                               underPrice );
 
     return scope.Close( Undefined() );
@@ -687,7 +686,7 @@ Handle<Value> NodeIbapi::CalculateOptionPrice( const Arguments &args ) {
     double volatility = args[2]->NumberValue();
     double underPrice = args[3]->NumberValue();
 
-    obj->m_client.calculateOptionPrice( reqId, contract, volatility, 
+    obj->m_client.calculateOptionPrice( reqId, contract, volatility,
                                         underPrice );
 
     return scope.Close( Undefined() );
@@ -757,7 +756,7 @@ Handle<Value> NodeIbapi::ReqAccountSummary( const Arguments &args ) {
     }
 
     int reqId = args[0]->Int32Value();
-    IBString groupName = getChar( args[1] ); 
+    IBString groupName = getChar( args[1] );
     IBString tags = getChar( args[2] );
     obj->m_client.reqAccountSummary( reqId, groupName, tags );
 
@@ -939,12 +938,12 @@ bool NodeIbapi::isWrongType( bool predicateRes, int argId ) {
     return false;
 }
 
-void NodeIbapi::convertContractForIb( Handle<Object> ibContract, 
+void NodeIbapi::convertContractForIb( Handle<Object> ibContract,
                                       Contract &contract ) {
-    // checks if order is being submitted through Conract ID from 
+    // checks if order is being submitted through Conract ID from
     //  contract specification
     contract.conId = ibContract->Get( String::New( "conId" ) )->Int32Value();
-    contract.exchange = 
+    contract.exchange =
         getChar( ibContract->Get( String::New( "exchange" ) ) );
 
     contract.symbol = getChar( ibContract->Get( String::New( "symbol" ) ) );
@@ -952,18 +951,18 @@ void NodeIbapi::convertContractForIb( Handle<Object> ibContract,
     contract.expiry = getChar( ibContract->Get( String::New( "expiry" ) ) );
     contract.strike = ibContract->Get( String::New( "strike" ) )->NumberValue();
     contract.right = getChar( ibContract->Get( String::New( "right" ) ) );
-    contract.multiplier = 
+    contract.multiplier =
         getChar( ibContract->Get( String::New( "multiplier" ) ) );
-    contract.primaryExchange = 
+    contract.primaryExchange =
         getChar( ibContract->Get( String::New( "primaryExchange" ) ) );
     contract.currency = getChar( ibContract->Get( String::New( "currency" ) ) );
-    contract.localSymbol = 
+    contract.localSymbol =
         getChar( ibContract->Get( String::New( "localSymbol" ) ) );
-    contract.tradingClass = 
+    contract.tradingClass =
         getChar( ibContract->Get( String::New( "tradingClass" ) ) );
-    contract.includeExpired = 
+    contract.includeExpired =
         ibContract->Get( String::New( "includeExpired" ) )->BooleanValue();
-    contract.secIdType = 
+    contract.secIdType =
         getChar( ibContract->Get( String::New( "secIdType" ) ) );
     contract.secId = getChar( ibContract->Get( String::New( "secId" ) ) );
 }
@@ -971,60 +970,62 @@ void NodeIbapi::convertContractForIb( Handle<Object> ibContract,
 void NodeIbapi::convertSubForIb( Handle<Object> scannerSub,
                                  ScannerSubscription &subscription ) {
 
-    subscription.numberOfRows =  
+    subscription.numberOfRows =
         scannerSub->Get( String::New( "numberOfRows" ) )->Int32Value();
-    subscription.abovePrice =  
+    subscription.abovePrice =
         scannerSub->Get( String::New( "abovePrice" ) )->NumberValue();
-    subscription.belowPrice =  
+    subscription.belowPrice =
         scannerSub->Get( String::New( "belowPrice" ) )->NumberValue();
-    subscription.aboveVolume =  
+    subscription.aboveVolume =
         scannerSub->Get( String::New( "aboveVolume" ) )->Int32Value();
-    subscription.marketCapAbove = 
+    subscription.marketCapAbove =
         scannerSub->Get( String::New( "marketCapAbove" ) )->NumberValue();
-    subscription.marketCapBelow = 
+    subscription.marketCapBelow =
         scannerSub->Get( String::New( "marketCapBelow" ) )->NumberValue();
-    subscription.couponRateAbove = 
+    subscription.couponRateAbove =
         scannerSub->Get( String::New( "couponRateAbove" ) )->NumberValue();
-    subscription.couponRateBelow = 
+    subscription.couponRateBelow =
         scannerSub->Get( String::New( "couponRateBelow" ) )->NumberValue();
 
-    subscription.instrument = 
+    subscription.instrument =
         getChar( scannerSub->Get( String::New( "instrument" ) ) );
-    subscription.locationCode = 
+    subscription.locationCode =
         getChar( scannerSub->Get( String::New( "locationCode" ) ) );
-    subscription.scanCode = 
+    subscription.scanCode =
         getChar( scannerSub->Get( String::New( "scanCode" ) ) );
-    subscription.moodyRatingAbove = 
+    subscription.moodyRatingAbove =
         getChar( scannerSub->Get( String::New( "moodyRatingAbove" ) ) );
-    subscription.moodyRatingBelow = 
+    subscription.moodyRatingBelow =
         getChar( scannerSub->Get( String::New( "moodyRatingBelow" ) ) );
-    subscription.spRatingAbove = 
+    subscription.spRatingAbove =
         getChar( scannerSub->Get( String::New( "spRatingAbove" ) ) );
-    subscription.spRatingBelow = 
+    subscription.spRatingBelow =
         getChar( scannerSub->Get( String::New( "spRatingBelow" ) ) );
-    subscription.maturityDateAbove = 
+    subscription.maturityDateAbove =
         getChar( scannerSub->Get( String::New( "maturityDateAbove" ) ) );
-    subscription.maturityDateBelow = 
+    subscription.maturityDateBelow =
         getChar( scannerSub->Get( String::New( "maturityDateBelow" ) ) );
-    subscription.excludeConvertible = 
+    subscription.excludeConvertible =
         scannerSub->Get( String::New( "excludeConvertible" ) )->Int32Value();
-    subscription.averageOptionVolumeAbove = 
-        scannerSub->Get( String::New( "averageOptionVolumeAbove" ) )->Int32Value();
-    subscription.scannerSettingPairs = 
+    subscription.averageOptionVolumeAbove =
+        scannerSub->Get(
+            String::New( "averageOptionVolumeAbove" ) )->Int32Value();
+    subscription.scannerSettingPairs =
         getChar( scannerSub->Get( String::New( "scannerSettingPairs" ) ) );
-    subscription.stockTypeFilter = 
+    subscription.stockTypeFilter =
         getChar( scannerSub->Get( String::New( "stockTypeFilter" ) ) );
 }
 
 void NodeIbapi::convertOrderForIb( Handle<Object> ibOrder, Order &order ) {
-        // order identifier
+    // order identifier
     order.orderId = ibOrder->Get( String::New( "orderId" ) )->Int32Value();
     order.clientId = ibOrder->Get( String::New( "clientId" ) )->Int32Value();
     order.permId = ibOrder->Get( String::New( "permId" ) )->Int32Value();
 
     // main order fields
     order.action = getChar( ibOrder->Get( String::New( "action" ) ) );
-    order.totalQuantity = ibOrder->Get( String::New( "totalQuantity" ) )->Int32Value();
+    order.totalQuantity =
+        ibOrder->Get( String::New( "totalQuantity" ) )->Int32Value();
     order.orderType = getChar( ibOrder->Get( String::New( "orderType" ) ) );
     order.lmtPrice = ibOrder->Get( String::New( "lmtPrice" ) )->NumberValue();
     order.auxPrice = ibOrder->Get( String::New( "auxPrice" ) )->NumberValue();
@@ -1036,72 +1037,121 @@ void NodeIbapi::convertOrderForIb( Handle<Object> ibOrder, Order &order ) {
     order.orderRef = getChar( ibOrder->Get( String::New( "orderRef" ) ) );
     order.transmit = ibOrder->Get( String::New( "transmit" ) )->BooleanValue();
     order.parentId = ibOrder->Get( String::New( "parentId" ) )->Int32Value();
-    order.blockOrder = ibOrder->Get( String::New( "blockOrder" ) )->BooleanValue();
-    order.sweepToFill = ibOrder->Get( String::New( "sweepToFill" ) )->BooleanValue();
-    order.displaySize = ibOrder->Get( String::New( "displaySize" ) )->Int32Value();
-    order.triggerMethod = ibOrder->Get( String::New( "triggerMethod" ) )->Int32Value();
-    order.outsideRth = ibOrder->Get( String::New( "outsideRth" ) )->BooleanValue();
+    order.blockOrder =
+        ibOrder->Get( String::New( "blockOrder" ) )->BooleanValue();
+    order.sweepToFill =
+        ibOrder->Get( String::New( "sweepToFill" ) )->BooleanValue();
+    order.displaySize =
+        ibOrder->Get( String::New( "displaySize" ) )->Int32Value();
+    order.triggerMethod =
+        ibOrder->Get( String::New( "triggerMethod" ) )->Int32Value();
+    order.outsideRth =
+        ibOrder->Get( String::New( "outsideRth" ) )->BooleanValue();
     order.hidden = ibOrder->Get( String::New( "hidden" ) )->BooleanValue();
-    order.goodAfterTime = getChar( ibOrder->Get( String::New( "goodAfterTime" ) ) );
-    order.goodTillDate = getChar( ibOrder->Get( String::New( "goodTillDate" ) ) );
+    order.goodAfterTime =
+        getChar( ibOrder->Get( String::New( "goodAfterTime" ) ) );
+    order.goodTillDate =
+        getChar( ibOrder->Get( String::New( "goodTillDate" ) ) );
     order.rule80A = getChar( ibOrder->Get( String::New( "rule80A" ) ) );
-    order.allOrNone = ibOrder->Get( String::New( "allOrNone" ) )->BooleanValue();
+    order.allOrNone =
+        ibOrder->Get( String::New( "allOrNone" ) )->BooleanValue();
     order.minQty = ibOrder->Get( String::New( "minQty" ) )->Int32Value();
-    order.percentOffset = ibOrder->Get( String::New( "percentOffset" ) )->NumberValue();
-    order.overridePercentageConstraints = ibOrder->Get( String::New( "overridePercentageConstraints" ) )->BooleanValue();
-    order.trailStopPrice = ibOrder->Get( String::New( "trailStopPrice" ) )->NumberValue();
-    order.trailingPercent = ibOrder->Get( String::New( "trailingPercent" ) )->NumberValue();
+    order.percentOffset =
+        ibOrder->Get( String::New( "percentOffset" ) )->NumberValue();
+    order.overridePercentageConstraints =
+        ibOrder->Get(
+            String::New( "overridePercentageConstraints" ) )->BooleanValue();
+    order.trailStopPrice =
+        ibOrder->Get( String::New( "trailStopPrice" ) )->NumberValue();
+    order.trailingPercent =
+        ibOrder->Get( String::New( "trailingPercent" ) )->NumberValue();
 
     // financial advisors only
 
     // institutional (ie non-cleared) only
 
     // SMART routing only
-    order.discretionaryAmt = ibOrder->Get( String::New( "discretionaryAmt" ) )->NumberValue();
-    order.eTradeOnly = ibOrder->Get( String::New( "eTradeOnly" ) )->BooleanValue();
-    order.firmQuoteOnly = ibOrder->Get( String::New( "firmQuoteOnly" ) )->BooleanValue();
-    order.nbboPriceCap = ibOrder->Get( String::New( "nbboPriceCap" ) )->NumberValue();
-    order.optOutSmartRouting = ibOrder->Get( String::New( "optOutSmartRouting" ) )->BooleanValue();
+    order.discretionaryAmt =
+        ibOrder->Get( String::New( "discretionaryAmt" ) )->NumberValue();
+    order.eTradeOnly =
+        ibOrder->Get( String::New( "eTradeOnly" ) )->BooleanValue();
+    order.firmQuoteOnly =
+        ibOrder->Get( String::New( "firmQuoteOnly" ) )->BooleanValue();
+    order.nbboPriceCap =
+        ibOrder->Get( String::New( "nbboPriceCap" ) )->NumberValue();
+    order.optOutSmartRouting =
+        ibOrder->Get( String::New( "optOutSmartRouting" ) )->BooleanValue();
 
     // BOX exchange orders only
-    order.auctionStrategy = ibOrder->Get( String::New( "auctionStrategy" ) )->Int32Value();
-    order.startingPrice = ibOrder->Get( String::New( "startingPrice" ) )->NumberValue();
-    order.stockRefPrice = ibOrder->Get( String::New( "stockRefPrice" ) )->NumberValue();
-    order.delta = ibOrder->Get( String::New( "delta" ) )->NumberValue();
+    order.auctionStrategy =
+        ibOrder->Get( String::New( "auctionStrategy" ) )->Int32Value();
+    order.startingPrice =
+        ibOrder->Get( String::New( "startingPrice" ) )->NumberValue();
+    order.stockRefPrice =
+        ibOrder->Get( String::New( "stockRefPrice" ) )->NumberValue();
+    order.delta =
+        ibOrder->Get( String::New( "delta" ) )->NumberValue();
 
     // pegged to stock and VOL orders only
-    order.stockRangeLower = ibOrder->Get( String::New( "stockRangeLower" ) )->NumberValue();
-    order.stockRangeUpper = ibOrder->Get( String::New( "stockRangeUpper" ) )->NumberValue();
+    order.stockRangeLower =
+        ibOrder->Get( String::New( "stockRangeLower" ) )->NumberValue();
+    order.stockRangeUpper =
+        ibOrder->Get( String::New( "stockRangeUpper" ) )->NumberValue();
 
     // VOLATILITY ORDERS ONLY
-    order.volatility = ibOrder->Get( String::New( "volatility" ) )->NumberValue();
-    order.volatilityType = ibOrder->Get( String::New( "volatilityType" ) )->Int32Value();
-    order.deltaNeutralOrderType = getChar( ibOrder->Get( String::New( "deltaNeutralOrderType" ) ) );
-    order.deltaNeutralAuxPrice = ibOrder->Get( String::New( "deltaNeutralAuxPrice" ) )->NumberValue();
-    order.deltaNeutralConId = ibOrder->Get( String::New( "deltaNeutralConId" ) )->Int32Value();
-    order.deltaNeutralSettlingFirm = getChar( ibOrder->Get( String::New( "deltaNeutralSettlingFirm" ) ) );
-    order.deltaNeutralClearingAccount = getChar( ibOrder->Get( String::New( "deltaNeutralClearingAccount" ) ) );
-    order.deltaNeutralClearingIntent = getChar( ibOrder->Get( String::New( "deltaNeutralClearingIntent" ) ) );
-    order.deltaNeutralOpenClose = getChar( ibOrder->Get( String::New( "deltaNeutralOpenClose" ) ) );
-    order.deltaNeutralShortSale = ibOrder->Get( String::New( "deltaNeutralShortSale" ) )->BooleanValue();
-    order.deltaNeutralShortSaleSlot = ibOrder->Get( String::New( "deltaNeutralShortSaleSlot" ) )->Int32Value();
-    order.deltaNeutralDesignatedLocation = getChar( ibOrder->Get( String::New( "deltaNeutralDesignatedLocation" ) ) );
-    order.continuousUpdate = ibOrder->Get( String::New( "continuousUpdate" ) )->BooleanValue();
-    order.referencePriceType = ibOrder->Get( String::New( "referencePriceType" ) )->Int32Value();
+    order.volatility =
+        ibOrder->Get( String::New( "volatility" ) )->NumberValue();
+    order.volatilityType =
+        ibOrder->Get( String::New( "volatilityType" ) )->Int32Value();
+    order.deltaNeutralOrderType =
+        getChar( ibOrder->Get( String::New( "deltaNeutralOrderType" ) ) );
+    order.deltaNeutralAuxPrice =
+        ibOrder->Get( String::New( "deltaNeutralAuxPrice" ) )->NumberValue();
+    order.deltaNeutralConId =
+        ibOrder->Get( String::New( "deltaNeutralConId" ) )->Int32Value();
+    order.deltaNeutralSettlingFirm =
+        getChar( ibOrder->Get( String::New( "deltaNeutralSettlingFirm" ) ) );
+    order.deltaNeutralClearingAccount =
+        getChar( ibOrder->Get( String::New( "deltaNeutralClearingAccount" ) ) );
+    order.deltaNeutralClearingIntent =
+        getChar( ibOrder->Get( String::New( "deltaNeutralClearingIntent" ) ) );
+    order.deltaNeutralOpenClose =
+        getChar( ibOrder->Get( String::New( "deltaNeutralOpenClose" ) ) );
+    order.deltaNeutralShortSale =
+        ibOrder->Get( String::New( "deltaNeutralShortSale" ) )->BooleanValue();
+    order.deltaNeutralShortSaleSlot =
+        ibOrder->Get( String::New( "deltaNeutralShortSaleSlot" ) )->Int32Value();
+    order.deltaNeutralDesignatedLocation =
+        getChar( ibOrder->Get(
+            String::New( "deltaNeutralDesignatedLocation" ) ) );
+    order.continuousUpdate =
+        ibOrder->Get( String::New( "continuousUpdate" ) )->BooleanValue();
+    order.referencePriceType =
+        ibOrder->Get( String::New( "referencePriceType" ) )->Int32Value();
 
     // COMBO ORDERS ONLY
 
     // SCALE ORDERS ONLY
-    order.scaleInitLevelSize = ibOrder->Get( String::New( "scaleInitLevelSize" ) )->Int32Value();
-    order.scaleSubsLevelSize = ibOrder->Get( String::New( "scaleSubsLevelSize" ) )->Int32Value();
-    order.scalePriceIncrement = ibOrder->Get( String::New( "scalePriceIncrement" ) )->NumberValue();
-    order.scalePriceAdjustValue = ibOrder->Get( String::New( "scalePriceAdjustValue" ) )->NumberValue();
-    order.scalePriceAdjustInterval = ibOrder->Get( String::New( "scalePriceAdjustInterval" ) )->Int32Value();
-    order.scaleProfitOffset = ibOrder->Get( String::New( "scaleProfitOffset" ) )->NumberValue();
-    order.scaleAutoReset = ibOrder->Get( String::New( "scaleAutoReset" ) )->BooleanValue();
-    order.scaleInitPosition = ibOrder->Get( String::New( "scaleInitPosition" ) )->Int32Value();
-    order.scaleInitFillQty = ibOrder->Get( String::New( "scaleInitFillQty" ) )->Int32Value();
-    order.scaleRandomPercent = ibOrder->Get( String::New( "scaleRandomPercent" ) )->BooleanValue();
+    order.scaleInitLevelSize =
+        ibOrder->Get( String::New( "scaleInitLevelSize" ) )->Int32Value();
+    order.scaleSubsLevelSize =
+        ibOrder->Get( String::New( "scaleSubsLevelSize" ) )->Int32Value();
+    order.scalePriceIncrement =
+        ibOrder->Get( String::New( "scalePriceIncrement" ) )->NumberValue();
+    order.scalePriceAdjustValue =
+        ibOrder->Get( String::New( "scalePriceAdjustValue" ) )->NumberValue();
+    order.scalePriceAdjustInterval =
+        ibOrder->Get( String::New( "scalePriceAdjustInterval" ) )->Int32Value();
+    order.scaleProfitOffset =
+        ibOrder->Get( String::New( "scaleProfitOffset" ) )->NumberValue();
+    order.scaleAutoReset =
+        ibOrder->Get( String::New( "scaleAutoReset" ) )->BooleanValue();
+    order.scaleInitPosition =
+        ibOrder->Get( String::New( "scaleInitPosition" ) )->Int32Value();
+    order.scaleInitFillQty =
+        ibOrder->Get( String::New( "scaleInitFillQty" ) )->Int32Value();
+    order.scaleRandomPercent =
+        ibOrder->Get( String::New( "scaleRandomPercent" ) )->BooleanValue();
 
     // HEDGE ORDERS
     order.hedgeType = getChar( ibOrder->Get( String::New( "hedgeType" ) ) );
@@ -1109,9 +1159,12 @@ void NodeIbapi::convertOrderForIb( Handle<Object> ibOrder, Order &order ) {
 
     // Clearing info
     order.account = getChar( ibOrder->Get( String::New( "account" ) ) );
-    order.settlingFirm = getChar( ibOrder->Get( String::New( "settlingFirm" ) ) );
-    order.clearingAccount = getChar( ibOrder->Get( String::New( "clearingAccount" ) ) );
-    order.clearingIntent = getChar( ibOrder->Get( String::New( "clearingIntent" ) ) );
+    order.settlingFirm =
+        getChar( ibOrder->Get( String::New( "settlingFirm" ) ) );
+    order.clearingAccount =
+        getChar( ibOrder->Get( String::New( "clearingAccount" ) ) );
+    order.clearingIntent =
+        getChar( ibOrder->Get( String::New( "clearingIntent" ) ) );
 
     // ALGO ORDERS ONLY
 
