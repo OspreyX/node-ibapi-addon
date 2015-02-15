@@ -10,6 +10,8 @@ Author: Jae Yang - [dchem] (https://github.com/dchem/)
 For direct JavaScript implementation of IB API for Node.js, please visit 
 Pilwon Huh's [node-ib] (https://github.com/pilwon/node-ib).
 
+[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/dchem/node-ibapi-addon?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+
 ### Important
 ####Note:
 The inbound messages' are in the order it was received. Also, the outbound 
@@ -23,6 +25,7 @@ migrate your code.
 
 ### Change Notes:
 
+* 2015-02-15 - 0.2.3  - Code cleanup and updated examples
 * 2015-01-07 - 0.2.2  - More CPU efficient
 * 2014-12-29 - 0.2.1  - Uses event handlers instead of event emitters
 * 2014-11-12 - 0.1.23 - Includes lib into the package itself
