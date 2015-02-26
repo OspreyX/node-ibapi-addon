@@ -1,5 +1,7 @@
 node-ibapi-addon
 ================
+[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/dchem/node-ibapi-addon?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+[![Build Status](https://travis-ci.org/dchem/node-ibapi-addon.svg?branch=develop)](https://travis-ci.org/dchem/node-ibapi-addon)
 
 Interactive Brokers API addon for Node.js compatible with IB API 9.71
 
@@ -9,8 +11,6 @@ Author: Jae Yang - [dchem] (https://github.com/dchem/)
 
 For direct JavaScript implementation of IB API for Node.js, please visit 
 Pilwon Huh's [node-ib] (https://github.com/pilwon/node-ib).
-
-[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/dchem/node-ibapi-addon?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 ### Important
 ####Note:
