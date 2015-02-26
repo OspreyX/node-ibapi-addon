@@ -6,6 +6,12 @@ then
     mkdir $DIR
 fi
 
+if [ "$(expr substr $(node -v) 4 5)" = "10" ]; then
+mv NodeIbapiTen.cpp NodeIbapi.cpp
+mv NodeIbapiTen.h NodeIbapi.h
+mv IbJsonParserTen.cpp IbJsonParser.cpp
+fi
+
 cd $DIR
 rm twsapi_macunix.971.01.jar
 wget http://interactivebrokers.github.io/downloads/twsapi_macunix.971.01.jar
@@ -43,3 +49,4 @@ sed -i 's/#warning, Release build of libjson, but NDEBUG is not on//g' ./libjson
 sed -i 's/#error, Release build of libjson, but NDEBUG is not on//g' ./libjson/_internal/Source/JSONDefs.h
 sed -i 's@#define JSON_LIBRARY@//#define JSON_LIBRARY@g' ./libjson/JSONOptions.h
 fi
+
