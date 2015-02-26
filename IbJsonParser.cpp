@@ -16,7 +16,8 @@ IbJsonParser::~IbJsonParser()
 }
 
 Handle<Object> IbJsonParser::parse( const JSONNode& n ) {
-    Handle<Object> retData = Object::New();
+    Isolate* isolate = Isolate::GetCurrent();
+    Handle<Object> retData = Object::New(isolate);
     JSONNode::const_iterator i = n.begin();
     while ( i != n.end() ) {
         std::string node_name = i->name();
@@ -25,23 +26,23 @@ Handle<Object> IbJsonParser::parse( const JSONNode& n ) {
              node_name == "commissionReport" || node_name == "contract" ||
              node_name == "order" || node_name == "execution" ||
              node_name == "summary" || node_name == "contractDetails" ) {
-            retData->Set( String::NewSymbol( node_name.c_str() ), parse( *i ) );
+            retData->Set( String::NewFromUtf8( isolate, node_name.c_str() ), parse( *i ) );
         }
         else if ( filterAsString( node_name ) ) {
-            retData->Set( String::NewSymbol( node_name.c_str() ),
-                          String::New( i->as_string().c_str() ) );
+            retData->Set( String::NewFromUtf8( isolate, node_name.c_str() ),
+                          String::NewFromUtf8( isolate, i->as_string().c_str() ) );
         }
         else if ( filterAsNumber( node_name ) ) {
-            retData->Set( String::NewSymbol( node_name.c_str() ),
-                          Number::New( i->as_float() ) );
+            retData->Set( String::NewFromUtf8( isolate, node_name.c_str() ),
+                          Number::New( isolate, i->as_float() ) );
         }
         else if ( filterAsInteger( node_name ) ) {
-            retData->Set( String::NewSymbol( node_name.c_str() ),
-                          Integer::New( i->as_int() ) );
+            retData->Set( String::NewFromUtf8( isolate, node_name.c_str() ),
+                          Integer::New( isolate, i->as_int() ) );
         }
         else if ( filterAsBoolean( node_name ) ) {
-            retData->Set( String::NewSymbol( node_name.c_str() ),
-                          Boolean::New( i->as_bool() ) );
+            retData->Set( String::NewFromUtf8( isolate, node_name.c_str() ),
+                          Boolean::New( isolate, i->as_bool() ) );
         }
         ++i;
     }
