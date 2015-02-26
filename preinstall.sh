@@ -8,6 +8,7 @@ fi
 
 cd $DIR
 wget http://interactivebrokers.github.io/downloads/twsapi_macunix.971.01.jar
+rm -rf ./IBJts
 unzip twsapi_macunix.971.01.jar
 cp ./IBJts/source/PosixClient/Shared/* .
 cp ./IBJts/source/PosixClient/src/* .
