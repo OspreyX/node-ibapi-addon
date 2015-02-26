@@ -6,10 +6,11 @@ then
     mkdir $DIR
 fi
 
-if [ "$(expr substr $(node -v) 4 5)" = "10" ]; then
-mv NodeIbapiTen.cpp NodeIbapi.cpp
-mv NodeIbapiTen.h NodeIbapi.h
-mv IbJsonParserTen.cpp IbJsonParser.cpp
+if [ "$(node -v | cut -c 1-5)" = "v0.10" ]; then
+echo "Node 0.10 detected"
+mv ./NodeIbapiTen.cpp ./NodeIbapi.cpp
+mv ./NodeIbapiTen.h ./NodeIbapi.h
+mv ./IbJsonParserTen.cpp ./IbJsonParser.cpp
 fi
 
 cd $DIR
