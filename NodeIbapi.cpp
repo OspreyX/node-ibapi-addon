@@ -169,7 +169,6 @@ void NodeIbapi::ReqMktData( const FunctionCallbackInfo<Value> &args ) {
     HandleScope scope(isolate);
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
     if ( isWrongArgNumber( args.Length(), 4 ) ) {
-    std::cout << "POOP5" << std::endl;
         return;
     }
 
@@ -929,7 +928,6 @@ void NodeIbapi::convertContractForIb( Handle<Object> ibContract,
 void NodeIbapi::convertSubForIb( Handle<Object> scannerSub,
                                  ScannerSubscription &subscription ) {
     Isolate* isolate = Isolate::GetCurrent();
-    std::cout << "CSFI - " << isolate << std::endl;
 
     subscription.numberOfRows =
         scannerSub->Get( String::NewFromUtf8(isolate, "numberOfRows" ) )->Int32Value();
