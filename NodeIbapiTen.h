@@ -87,6 +87,8 @@ private:
 
     static bool isWrongArgNumber( const Arguments& args, int argNum );
     static bool isWrongType( bool predicateRes, int argId );
+    static void convertExecutionFilterForIb( Handle<Object> ibExecutionFilter,
+                                             ExecutionFilter &filter);
     static void convertContractForIb( Handle<Object> ibContract, 
                                       Contract &contract );
     static void convertSubForIb( Handle<Object> scannerSub, 

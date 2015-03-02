@@ -328,13 +328,8 @@ Handle<Value> NodeIbapi::ReqExecutions( const Arguments &args ) {
     }
     int reqId = args[0]->Int32Value();
     ExecutionFilter filter;
-    filter.m_clientId = args[1]->Int32Value();
-    filter.m_acctCode = getChar( args[2] );
-    filter.m_time = getChar( args[3] );
-    filter.m_symbol = getChar( args[4] );
-    filter.m_secType = getChar( args[5] );
-    filter.m_exchange = getChar( args[6] );
-    filter.m_side = getChar( args[7] );
+    Handle<Object> ibExecutionFilter = Handle<Object>::Cast( args[1] );
+    convertExecutionFilterForIb(ibExecutionFilter, filter);
 
     obj->m_client.reqExecutions( reqId, filter );
     return scope.Close( Undefined() );
@@ -923,6 +918,28 @@ bool NodeIbapi::isWrongArgNumber( const Arguments &args, int argNum ) {
                 String::New( "Wrong number of arguments" ) ) );
         return true;
     }
+    for (int ii = 0; ii < args.Length(); ii++) {
+        if ( args[ii]->IsUndefined() ) {
+            std::ostringstream ss;
+            if (ii == 0) {
+                ss << "1st";
+            }
+            else if (ii == 1) {
+                ss << "2nd";
+            }
+            else if (ii == 2) {
+                ss << "3rd";
+            }
+            else if (ii > 2) {
+                ss << ii+1 << "th";
+            }
+            ss << " argument is undefined.";
+
+            ThrowException( Exception::TypeError(
+                String::New(ss.str().c_str() ) ) );
+            return true;
+        }
+    }
     return false;
 }
 
@@ -936,6 +953,25 @@ bool NodeIbapi::isWrongType( bool predicateRes, int argId ) {
         return true;
     } 
     return false;
+}
+
+void NodeIbapi::convertExecutionFilterForIb( Handle<Object> ibExecutionFilter,
+                                             ExecutionFilter &filter) {
+
+    filter.m_clientId = ibExecutionFilter->Get(
+            String::New( "clientId") )->Int32Value();
+    filter.m_acctCode = getChar(
+            ibExecutionFilter->Get( String::New( "acctCode") ) );
+    filter.m_time = getChar(
+            ibExecutionFilter->Get( String::New( "time") ) );
+    filter.m_symbol = getChar(
+            ibExecutionFilter->Get( String::New( "symbol") ) );
+    filter.m_secType = getChar(
+            ibExecutionFilter->Get( String::New( "secType") ) );
+    filter.m_exchange = getChar(
+            ibExecutionFilter->Get( String::New( "exchange") ) );
+    filter.m_side = getChar(
+            ibExecutionFilter->Get( String::New( "side") ) );
 }
 
 void NodeIbapi::convertContractForIb( Handle<Object> ibContract,

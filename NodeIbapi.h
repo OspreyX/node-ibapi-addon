@@ -88,8 +88,11 @@ private:
 private:
     static char *getChar( Local<Value> value, const char *fallback = "" );
 
-    static bool isWrongArgNumber( Isolate *isolate, const FunctionCallbackInfo<Value>& args, int argNum );
-    static bool isWrongType( Isolate *isolate, bool predicateRes, int argId );
+    static bool isWrongArgNumber( const FunctionCallbackInfo<Value>& args,
+                                    int argNumExpected );
+    static bool isWrongType( bool predicateRes, int argId );
+    static void convertExecutionFilterForIb( Handle<Object> ibExecutionFilter,
+                                             ExecutionFilter &filter);
     static void convertContractForIb( Handle<Object> ibContract, 
                                       Contract &contract );
     static void convertSubForIb( Handle<Object> scannerSub, 

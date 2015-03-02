@@ -110,10 +110,10 @@ void NodeIbapi::Connect( const FunctionCallbackInfo<Value> &args ) {
     HandleScope scope(isolate);
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
 
-    if ( isWrongArgNumber( isolate, args, 3 ) || 
-        isWrongType( isolate, !args[0]->IsString(), 0 ) ||
-        isWrongType( isolate, !args[1]->IsUint32(), 1 ) || 
-        isWrongType( isolate, !args[2]->IsInt32(), 2 ) ) {
+    if ( isWrongArgNumber( args, 3 ) || 
+        isWrongType( !args[0]->IsString(), 0 ) ||
+        isWrongType( !args[1]->IsUint32(), 1 ) || 
+        isWrongType( !args[2]->IsInt32(), 2 ) ) {
         return;
     }
 
@@ -129,7 +129,6 @@ void NodeIbapi::Disconnect( const FunctionCallbackInfo<Value> &args ) {
     HandleScope scope(isolate);
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
     obj->m_client.disconnect();
-    return;
 }
 
 void NodeIbapi::IsConnected( const FunctionCallbackInfo<Value> &args ) {
@@ -144,7 +143,6 @@ void NodeIbapi::ProcessMsg( const FunctionCallbackInfo<Value> &args ) {
     HandleScope scope(isolate);
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
     obj->m_client.processMessages();
-    return;
 }
 
 
@@ -170,8 +168,7 @@ void NodeIbapi::ReqMktData( const FunctionCallbackInfo<Value> &args ) {
     Isolate* isolate = Isolate::GetCurrent();
     HandleScope scope(isolate);
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
-
-    if ( isWrongArgNumber( isolate, args, 4 ) ) {
+    if ( isWrongArgNumber( args, 4 ) ) {
         return;
     }
 
@@ -189,22 +186,20 @@ void NodeIbapi::ReqMktData( const FunctionCallbackInfo<Value> &args ) {
 
     obj->m_client.reqMktData( tickerId, contract, genericTick, snapShot,
                               mktDataOptions );
-    return;
 }
 void NodeIbapi::CancelMktData( const FunctionCallbackInfo<Value> &args ) {
     Isolate* isolate = Isolate::GetCurrent();
     HandleScope scope(isolate);
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
 
-    if ( isWrongArgNumber( isolate, args, 1 ) ||
-         isWrongType( isolate, !args[0]->IsUint32(), 0 ) ) {
+    if ( isWrongArgNumber( args, 1 ) ||
+         isWrongType( !args[0]->IsUint32(), 0 ) ) {
         return;
     }
 
     TickerId tickerId = args[0]->Int32Value();
 
     obj->m_client.cancelMktData( tickerId );
-    return;
 }
 void NodeIbapi::PlaceOrder( const FunctionCallbackInfo<Value> &args ) {
     Isolate* isolate = Isolate::GetCurrent();
@@ -229,7 +224,7 @@ void NodeIbapi::PlaceOrder( const FunctionCallbackInfo<Value> &args ) {
     convertContractForIb( ibContract, contract );
 
     if ( args.Length() == 7 ) {
-        if ( isWrongType( isolate, !args[2]->IsString(), 2 ) )
+        if ( isWrongType( !args[2]->IsString(), 2 ) )
             return;
 
         order.action = getChar( args[2] );
@@ -239,7 +234,7 @@ void NodeIbapi::PlaceOrder( const FunctionCallbackInfo<Value> &args ) {
         order.auxPrice = args[6]->NumberValue();
     }
     else if ( args.Length() == 3 ) {
-        if ( isWrongType( isolate, !args[2]->IsObject(), 2 ) )
+        if ( isWrongType( !args[2]->IsObject(), 2 ) )
             return;
 
         Handle<Object> ibOrder = Handle<Object>::Cast( args[2] );
@@ -247,78 +242,66 @@ void NodeIbapi::PlaceOrder( const FunctionCallbackInfo<Value> &args ) {
     }
 
     obj->m_client.placeOrder( orderId, contract, order );
-    return;
 }
 void NodeIbapi::CancelOrder( const FunctionCallbackInfo<Value> &args ) {
     Isolate* isolate = Isolate::GetCurrent();
     HandleScope scope(isolate);
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
-    if ( isWrongArgNumber( isolate, args, 1 ) ||
-         isWrongType( isolate, !args[0]->IsUint32(), 0 ) ) {
+    if ( isWrongArgNumber( args, 1 ) ||
+         isWrongType( !args[0]->IsUint32(), 0 ) ) {
         return;
     }
     obj->m_client.cancelOrder( args[0]->Int32Value() );
-    return;
 }
 void NodeIbapi::ReqOpenOrders( const FunctionCallbackInfo<Value> &args ) {
     Isolate* isolate = Isolate::GetCurrent();
     HandleScope scope(isolate);
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
     obj->m_client.reqOpenOrders();
-    return;
 }
 void NodeIbapi::ReqAccountUpdates( const FunctionCallbackInfo<Value> &args ) {
     Isolate* isolate = Isolate::GetCurrent();
     HandleScope scope(isolate);
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
-    if ( isWrongArgNumber( isolate, args, 2 ) ||
-         isWrongType( isolate, !args[0]->IsBoolean(), 0 ) ||
-         isWrongType( isolate, !args[1]->IsString(), 1 ) ) {
+    if ( isWrongArgNumber( args, 2 ) ||
+         isWrongType( !args[0]->IsBoolean(), 0 ) ||
+         isWrongType( !args[1]->IsString(), 1 ) ) {
         return;
     }
     bool subscribe = args[0]->BooleanValue();;
     IBString acctCode = getChar( args[1] );
 
     obj->m_client.reqAccountUpdates( subscribe, acctCode );
-    return;
 }
 void NodeIbapi::ReqExecutions( const FunctionCallbackInfo<Value> &args ) {
     Isolate* isolate = Isolate::GetCurrent();
     HandleScope scope(isolate);
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
-    if ( isWrongArgNumber( isolate, args, 8 ) ) {
+    if ( isWrongArgNumber( args, 2 ) ) {
         return;
     }
     int reqId = args[0]->Int32Value();
     ExecutionFilter filter;
-    filter.m_clientId = args[1]->Int32Value();
-    filter.m_acctCode = getChar( args[2] );
-    filter.m_time = getChar( args[3] );
-    filter.m_symbol = getChar( args[4] );
-    filter.m_secType = getChar( args[5] );
-    filter.m_exchange = getChar( args[6] );
-    filter.m_side = getChar( args[7] );
+    Handle<Object> ibExecutionFilter = Handle<Object>::Cast( args[1] );
+    convertExecutionFilterForIb(ibExecutionFilter, filter);
 
     obj->m_client.reqExecutions( reqId, filter );
-    return;
 }
 void NodeIbapi::ReqIds( const FunctionCallbackInfo<Value> &args ) {
     Isolate* isolate = Isolate::GetCurrent();
     HandleScope scope(isolate);
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
-    if ( isWrongArgNumber( isolate, args, 1 ) ) {
+    if ( isWrongArgNumber( args, 1 ) ) {
         return;
     }
     int numIds = args[0]->Int32Value();
     obj->m_client.reqIds( numIds );
-    return;
 }
 void NodeIbapi::CheckMessages( const FunctionCallbackInfo<Value> &args ) {
     Isolate* isolate = Isolate::GetCurrent();
     HandleScope scope(isolate);
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
     obj->m_client.checkMessages();
-    return;
 }
 void NodeIbapi::ReqContractDetails( const FunctionCallbackInfo<Value> &args ) {
     Isolate* isolate = Isolate::GetCurrent();
@@ -326,7 +309,7 @@ void NodeIbapi::ReqContractDetails( const FunctionCallbackInfo<Value> &args ) {
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
     int reqId = args[0]->Int32Value();
 
-    if ( isWrongArgNumber( isolate, args, 2 ) ) {
+    if ( isWrongArgNumber( args, 2 ) ) {
         return;
     }
 
@@ -337,14 +320,13 @@ void NodeIbapi::ReqContractDetails( const FunctionCallbackInfo<Value> &args ) {
     convertContractForIb( ibContract, contract );
 
     obj->m_client.reqContractDetails( reqId, contract );
-    return;
 }
 void NodeIbapi::ReqMktDepth( const FunctionCallbackInfo<Value> &args ) {
     Isolate* isolate = Isolate::GetCurrent();
     HandleScope scope(isolate);
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
 
-    if ( isWrongArgNumber( isolate, args, 3 ) ) {
+    if ( isWrongArgNumber( args, 3 ) ) {
         return;
     }
 
@@ -359,73 +341,65 @@ void NodeIbapi::ReqMktDepth( const FunctionCallbackInfo<Value> &args ) {
     TagValueListSPtr mktDepthOptions;
 
     obj->m_client.reqMktDepth( tickerId, contract, numRows, mktDepthOptions );
-    return;
 }
 void NodeIbapi::CancelMktDepth( const FunctionCallbackInfo<Value> &args ) {
     Isolate* isolate = Isolate::GetCurrent();
     HandleScope scope(isolate);
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
 
-    if ( isWrongArgNumber( isolate, args, 1 ) ) {
+    if ( isWrongArgNumber( args, 1 ) ) {
         return;
     }
     TickerId tickerId = args[0]->Int32Value();
     obj->m_client.cancelMktDepth( tickerId );
-    return;
 }
 void NodeIbapi::ReqNewsBulletins( const FunctionCallbackInfo<Value> &args ) {
     Isolate* isolate = Isolate::GetCurrent();
     HandleScope scope(isolate);
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
-    if ( isWrongArgNumber( isolate, args, 1 ) ) {
+    if ( isWrongArgNumber( args, 1 ) ) {
         return;
     }
     bool allMsgs = args[0]->BooleanValue();
     obj->m_client.reqNewsBulletins( allMsgs );
-    return;
 }
 void NodeIbapi::CancelNewsBulletins( const FunctionCallbackInfo<Value> &args ) {
     Isolate* isolate = Isolate::GetCurrent();
     HandleScope scope(isolate);
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
     obj->m_client.cancelNewsBulletins();
-    return;
 }
 void NodeIbapi::SetServerLogLevel( const FunctionCallbackInfo<Value> &args ) {
     Isolate* isolate = Isolate::GetCurrent();
     HandleScope scope(isolate);
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
-    if ( isWrongArgNumber( isolate, args, 1 ) ) {
+    if ( isWrongArgNumber( args, 1 ) ) {
         return;
     }
     int level = args[0]->Int32Value();
     obj->m_client.setServerLogLevel( level );
-    return;
 }
 void NodeIbapi::ReqAutoOpenOrders( const FunctionCallbackInfo<Value> &args ) {
     Isolate* isolate = Isolate::GetCurrent();
     HandleScope scope(isolate);
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
-    if ( isWrongArgNumber( isolate, args, 1 ) ) {
+    if ( isWrongArgNumber( args, 1 ) ) {
         return;
     }
     bool bAutoBind = args[0]->BooleanValue();
     obj->m_client.reqAutoOpenOrders( bAutoBind );
-    return;
 }
 void NodeIbapi::ReqAllOpenOrders( const FunctionCallbackInfo<Value> &args ) {
     Isolate* isolate = Isolate::GetCurrent();
     HandleScope scope(isolate);
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
     obj->m_client.reqAllOpenOrders();
-    return;
 }
 void NodeIbapi::ReqManagedAccts( const FunctionCallbackInfo<Value> &args ) {
     Isolate* isolate = Isolate::GetCurrent();
     HandleScope scope(isolate);
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
     obj->m_client.reqManagedAccts();
-    return;
 }
 void NodeIbapi::RequestFA( const FunctionCallbackInfo<Value> &args ) {
     Isolate* isolate = Isolate::GetCurrent();
@@ -440,15 +414,13 @@ void NodeIbapi::ReplaceFA( const FunctionCallbackInfo<Value> &args ) {
     HandleScope scope(isolate);
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
     // TODO: placeholder
-
-    return;
 }
 void NodeIbapi::ReqHistoricalData( const FunctionCallbackInfo<Value> &args ) {
     Isolate* isolate = Isolate::GetCurrent();
     HandleScope scope(isolate);
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
 
-    if ( isWrongArgNumber( isolate, args, 8 ) ) {
+    if ( isWrongArgNumber( args, 8 ) ) {
         return;
     }
     TickerId id;
@@ -477,14 +449,13 @@ void NodeIbapi::ReqHistoricalData( const FunctionCallbackInfo<Value> &args ) {
     obj->m_client.reqHistoricalData( id, contract, endDateTime, durationStr,
                                      barSizeSetting, whatToShow, useRTH,
                                      formatDate, chartOptions );
-    return;
 }
 void NodeIbapi::ExerciseOptions( const FunctionCallbackInfo<Value> &args ) {
     Isolate* isolate = Isolate::GetCurrent();
     HandleScope scope(isolate);
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
 
-    if ( isWrongArgNumber( isolate, args, 6 ) ) {
+    if ( isWrongArgNumber( args, 6 ) ) {
         return;
     }
     TickerId tickerId;
@@ -506,24 +477,22 @@ void NodeIbapi::ExerciseOptions( const FunctionCallbackInfo<Value> &args ) {
     obj->m_client.exerciseOptions( tickerId, contract, exerciseAction,
                                    exerciseQuantity, account, override );
 
-    return;
 }
 void NodeIbapi::CancelHistoricalData( const FunctionCallbackInfo<Value> &args ) {
     Isolate* isolate = Isolate::GetCurrent();
     HandleScope scope(isolate);
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
-    if ( isWrongArgNumber( isolate, args, 1 ) ) {
+    if ( isWrongArgNumber( args, 1 ) ) {
         return;
     }
     TickerId tickerId = args[0]->Int32Value();
     obj->m_client.cancelHistoricalData( tickerId );
-    return;
 }
 void NodeIbapi::ReqRealTimeBars( const FunctionCallbackInfo<Value> &args ) {
     Isolate* isolate = Isolate::GetCurrent();
     HandleScope scope(isolate);
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
-    if ( isWrongArgNumber( isolate, args, 5 ) ) {
+    if ( isWrongArgNumber( args, 5 ) ) {
         return;
     }
 
@@ -540,49 +509,43 @@ void NodeIbapi::ReqRealTimeBars( const FunctionCallbackInfo<Value> &args ) {
     TagValueListSPtr realTimeBarsOptions;
     obj->m_client.reqRealTimeBars( tickerId, contract, barSize, whatToShow,
                                    useRTH, realTimeBarsOptions );
-    return;
 }
 void NodeIbapi::CancelRealTimeBars( const FunctionCallbackInfo<Value> &args ) {
     Isolate* isolate = Isolate::GetCurrent();
     HandleScope scope(isolate);
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
 
-    if ( isWrongArgNumber( isolate, args, 1 ) ) {
+    if ( isWrongArgNumber( args, 1 ) ) {
         return;
     }
 
     TickerId tickerId = args[0]->Int32Value();
     obj->m_client.cancelRealTimeBars( tickerId );
-
-    return;
 }
 void NodeIbapi::CancelScannerSubscription( const FunctionCallbackInfo<Value> &args ) {
     Isolate* isolate = Isolate::GetCurrent();
     HandleScope scope(isolate);
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
 
-    if ( isWrongArgNumber( isolate, args, 1 ) ) {
+    if ( isWrongArgNumber( args, 1 ) ) {
         return;
     }
 
     TickerId tickerId = args[0]->Int32Value();
     obj->m_client.cancelScannerSubscription( tickerId );
-
-    return;
 }
 void NodeIbapi::ReqScannerParameters( const FunctionCallbackInfo<Value> &args ) {
     Isolate* isolate = Isolate::GetCurrent();
     HandleScope scope(isolate);
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
     obj->m_client.reqScannerParameters();
-    return;
 }
 void NodeIbapi::ReqScannerSubscription( const FunctionCallbackInfo<Value> &args ) {
     Isolate* isolate = Isolate::GetCurrent();
     HandleScope scope(isolate);
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
 
-    if ( isWrongArgNumber( isolate, args, 2 ) ) {
+    if ( isWrongArgNumber( args, 2 ) ) {
         return;
     }
 
@@ -595,22 +558,19 @@ void NodeIbapi::ReqScannerSubscription( const FunctionCallbackInfo<Value> &args 
 
     obj->m_client.reqScannerSubscription( tickerId, subscription,
                                         scannerSubscriptionOptions );
-
-    return;
 }
 void NodeIbapi::ReqCurrentTime( const FunctionCallbackInfo<Value> &args ) {
     Isolate* isolate = Isolate::GetCurrent();
     HandleScope scope(isolate);
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
     obj->m_client.reqCurrentTime();
-    return;
 }
 void NodeIbapi::ReqFundamentalData( const FunctionCallbackInfo<Value> &args ) {
     Isolate* isolate = Isolate::GetCurrent();
     HandleScope scope(isolate);
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
 
-    if ( isWrongArgNumber( isolate, args, 3 ) ) {
+    if ( isWrongArgNumber( args, 3 ) ) {
         return;
     }
 
@@ -622,27 +582,23 @@ void NodeIbapi::ReqFundamentalData( const FunctionCallbackInfo<Value> &args ) {
     IBString reportType = getChar( args[2] );
 
     obj->m_client.reqFundamentalData( reqId, contract, reportType );
-
-    return;
 }
 void NodeIbapi::CancelFundamentalData( const FunctionCallbackInfo<Value> &args ) {
     Isolate* isolate = Isolate::GetCurrent();
     HandleScope scope(isolate);
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
-    if ( isWrongArgNumber( isolate, args, 1 ) ) {
+    if ( isWrongArgNumber( args, 1 ) ) {
         return;
     }
 
     TickerId reqId = args[0]->Int32Value();
     obj->m_client.cancelFundamentalData( reqId );
-
-    return;
 }
 void NodeIbapi::CalculateImpliedVolatility( const FunctionCallbackInfo<Value> &args ) {
     Isolate* isolate = Isolate::GetCurrent();
     HandleScope scope(isolate);
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
-    if ( isWrongArgNumber( isolate, args, 4 ) ) {
+    if ( isWrongArgNumber( args, 4 ) ) {
         return;
     }
 
@@ -656,14 +612,12 @@ void NodeIbapi::CalculateImpliedVolatility( const FunctionCallbackInfo<Value> &a
 
     obj->m_client.calculateImpliedVolatility( reqId, contract, optionPrice,
                                               underPrice );
-
-    return;
 }
 void NodeIbapi::CalculateOptionPrice( const FunctionCallbackInfo<Value> &args ) {
     Isolate* isolate = Isolate::GetCurrent();
     HandleScope scope(isolate);
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
-    if ( isWrongArgNumber( isolate, args, 4 ) ) {
+    if ( isWrongArgNumber( args, 4 ) ) {
         return;
     }
 
@@ -677,77 +631,64 @@ void NodeIbapi::CalculateOptionPrice( const FunctionCallbackInfo<Value> &args ) 
 
     obj->m_client.calculateOptionPrice( reqId, contract, volatility,
                                         underPrice );
-
-    return;
 }
 void NodeIbapi::CancelCalculateImpliedVolatility(
     const FunctionCallbackInfo<Value> &args ) {
     Isolate* isolate = Isolate::GetCurrent();
     HandleScope scope(isolate);
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
-    if ( isWrongArgNumber( isolate, args, 1 ) ) {
+    if ( isWrongArgNumber( args, 1 ) ) {
         return;
     }
 
     TickerId reqId = args[0]->Int32Value();
     obj->m_client.cancelCalculateImpliedVolatility( reqId );
-
-    return;
 }
 void NodeIbapi::CancelCalculateOptionPrice( const FunctionCallbackInfo<Value> &args ) {
     Isolate* isolate = Isolate::GetCurrent();
     HandleScope scope(isolate);
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
-    if ( isWrongArgNumber( isolate, args, 1 ) ) {
+    if ( isWrongArgNumber( args, 1 ) ) {
         return;
     }
 
     TickerId reqId = args[0]->Int32Value();
     obj->m_client.cancelCalculateOptionPrice( reqId );
-
-    return;
 }
 void NodeIbapi::ReqGlobalCancel( const FunctionCallbackInfo<Value> &args ) {
     Isolate* isolate = Isolate::GetCurrent();
     HandleScope scope(isolate);
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
     obj->m_client.reqGlobalCancel();
-    return;
 }
 void NodeIbapi::ReqMarketDataType( const FunctionCallbackInfo<Value> &args ) {
     Isolate* isolate = Isolate::GetCurrent();
     HandleScope scope(isolate);
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
-    if ( isWrongArgNumber( isolate, args, 1 ) ) {
+    if ( isWrongArgNumber( args, 1 ) ) {
         return;
     }
 
     int marketDataType = args[0]->Int32Value();
     obj->m_client.reqMarketDataType( marketDataType );
-
-    return;
 }
 void NodeIbapi::ReqPositions( const FunctionCallbackInfo<Value> &args ) {
     Isolate* isolate = Isolate::GetCurrent();
     HandleScope scope(isolate);
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
     obj->m_client.reqPositions();
-
-    return;
 }
 void NodeIbapi::CancelPositions( const FunctionCallbackInfo<Value> &args ) {
     Isolate* isolate = Isolate::GetCurrent();
     HandleScope scope(isolate);
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
     obj->m_client.cancelPositions();
-
-    return;
 }
 void NodeIbapi::ReqAccountSummary( const FunctionCallbackInfo<Value> &args ) {
     Isolate* isolate = Isolate::GetCurrent();
     HandleScope scope(isolate);
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
-    if ( isWrongArgNumber( isolate, args, 3 ) ) {
+    if ( isWrongArgNumber( args, 3 ) ) {
         return;
     }
 
@@ -755,32 +696,28 @@ void NodeIbapi::ReqAccountSummary( const FunctionCallbackInfo<Value> &args ) {
     IBString groupName = getChar( args[1] );
     IBString tags = getChar( args[2] );
     obj->m_client.reqAccountSummary( reqId, groupName, tags );
-
-    return;
 }
 void NodeIbapi::CancelAccountSummary( const FunctionCallbackInfo<Value> &args ) {
     Isolate* isolate = Isolate::GetCurrent();
     HandleScope scope(isolate);
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
-    if ( isWrongArgNumber( isolate, args, 1 ) ) {
+    if ( isWrongArgNumber( args, 1 ) ) {
         return;
     }
 
     int reqId = args[0]->Int32Value();
     obj->m_client.cancelAccountSummary( reqId );
-
-    return;
 }
 void NodeIbapi::VerifyRequest( const FunctionCallbackInfo<Value>& args ) {
     Isolate* isolate = Isolate::GetCurrent();
     HandleScope scope(isolate);
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
-    if ( isWrongArgNumber( isolate, args, 2 ) ) {
+    if ( isWrongArgNumber( args, 2 ) ) {
         return;
     }
 
-    if ( isWrongType( isolate, !args[0]->IsString(), 0) ||
-         isWrongType( isolate, !args[1]->IsString(), 1) ) {
+    if ( isWrongType( !args[0]->IsString(), 0) ||
+         isWrongType( !args[1]->IsString(), 1) ) {
         return;
     }
 
@@ -788,54 +725,51 @@ void NodeIbapi::VerifyRequest( const FunctionCallbackInfo<Value>& args ) {
     IBString apiVersion = getChar( args[1] );
 
     obj->m_client.verifyRequest( apiName, apiVersion );
-    return;
 }
 void NodeIbapi::VerifyMessage( const FunctionCallbackInfo<Value>& args ) {
     Isolate* isolate = Isolate::GetCurrent();
     HandleScope scope(isolate);
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
-    if ( isWrongArgNumber( isolate, args, 1 ) ) {
+    if ( isWrongArgNumber( args, 1 ) ) {
         return;
     }
 
-    if ( isWrongType( isolate, !args[0]->IsString(), 0 ) ) {
+    if ( isWrongType( !args[0]->IsString(), 0 ) ) {
         return;
     }
 
     IBString apiData = getChar( args[0] );
 
     obj->m_client.verifyMessage( apiData );
-    return;
 }
 void NodeIbapi::QueryDisplayGroups( const FunctionCallbackInfo<Value>& args ) {
     Isolate* isolate = Isolate::GetCurrent();
     HandleScope scope(isolate);
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
 
-    if ( isWrongArgNumber( isolate, args, 1 ) ) {
+    if ( isWrongArgNumber( args, 1 ) ) {
         return;
     }
 
-    if ( isWrongType( isolate, !args[0]->IsInt32(), 0 ) ) {
+    if ( isWrongType( !args[0]->IsInt32(), 0 ) ) {
         return;
     }
 
     int reqId = args[0]->Int32Value();
 
     obj->m_client.queryDisplayGroups( reqId );
-    return;
 }
 void NodeIbapi::SubscribeToGroupEvents( const FunctionCallbackInfo<Value>& args ) {
     Isolate* isolate = Isolate::GetCurrent();
     HandleScope scope(isolate);
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
 
-    if ( isWrongArgNumber( isolate, args, 2 ) ) {
+    if ( isWrongArgNumber( args, 2 ) ) {
         return;
     }
 
-    if ( isWrongType( isolate, !args[0]->IsInt32(), 0 ) ||
-         isWrongType( isolate, !args[1]->IsInt32(), 1 ) ) {
+    if ( isWrongType( !args[0]->IsInt32(), 0 ) ||
+         isWrongType( !args[1]->IsInt32(), 1 ) ) {
         return;
     }
 
@@ -843,19 +777,18 @@ void NodeIbapi::SubscribeToGroupEvents( const FunctionCallbackInfo<Value>& args 
     int groupId = args[1]->Int32Value();
 
     obj->m_client.subscribeToGroupEvents( reqId, groupId );
-    return;
 }
 void NodeIbapi::UpdateDisplayGroup( const FunctionCallbackInfo<Value>& args ) {
     Isolate* isolate = Isolate::GetCurrent();
     HandleScope scope(isolate);
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
 
-    if ( isWrongArgNumber( isolate, args, 2 ) ) {
+    if ( isWrongArgNumber( args, 2 ) ) {
         return;
     }
 
-    if ( isWrongType( isolate, !args[0]->IsInt32(), 0 ) ||
-         isWrongType( isolate, !args[1]->IsString(), 1 ) ) {
+    if ( isWrongType( !args[0]->IsInt32(), 0 ) ||
+         isWrongType( !args[1]->IsString(), 1 ) ) {
         return;
     }
 
@@ -863,25 +796,23 @@ void NodeIbapi::UpdateDisplayGroup( const FunctionCallbackInfo<Value>& args ) {
     IBString contractInfo = getChar( args[1] );
 
     obj->m_client.updateDisplayGroup( reqId, contractInfo );
-    return;
 }
 void NodeIbapi::UnsubscribeFromGroupEvents( const FunctionCallbackInfo<Value>& args ) {
     Isolate* isolate = Isolate::GetCurrent();
     HandleScope scope(isolate);
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
 
-    if ( isWrongArgNumber( isolate, args, 1 ) ) {
+    if ( isWrongArgNumber( args, 1 ) ) {
         return;
     }
 
-    if ( isWrongType( isolate, !args[0]->IsInt32(), 0 ) ) {
+    if ( isWrongType( !args[0]->IsInt32(), 0 ) ) {
         return;
     }
 
     int reqId = args[0]->Int32Value();
 
     obj->m_client.unsubscribeFromGroupEvents( reqId );
-    return;
 }
 
 
@@ -910,7 +841,6 @@ void NodeIbapi::GetInboundMsg( const FunctionCallbackInfo<Value> &args ) {
 //  shortest-way-one-liner-to-get-a-default-argument-out-of-a-v8-function
 char *NodeIbapi::getChar( v8::Local<v8::Value> value, const char *fallback ) {
     if ( value->IsString() ) {
-        //v8::String::AsciiValue string( value );
         v8::String::Utf8Value string( value );
         char *str  = ( char * ) malloc( string.length() + 1 );
         std::strcpy( str, *string );
@@ -921,19 +851,43 @@ char *NodeIbapi::getChar( v8::Local<v8::Value> value, const char *fallback ) {
     return str;
 }
 
-bool NodeIbapi::isWrongArgNumber( Isolate *isolate,  const FunctionCallbackInfo<Value> &args, int argNum ) {
-    //Isolate* isolate = Isolate::GetCurrent();
-    if ( args.Length() != argNum ) {
+bool NodeIbapi::isWrongArgNumber( const FunctionCallbackInfo<Value> &args,
+                                  int argNumExpected ) {
+    Isolate* isolate = Isolate::GetCurrent();
+    if ( args.Length() != argNumExpected ) {
         isolate->ThrowException(
             Exception::TypeError(
                 String::NewFromUtf8(isolate, "Wrong number of arguments" ) ) );
         return true;
     }
+
+    for (int ii = 0; ii < args.Length(); ii++) {
+        if ( args[ii]->IsUndefined() ) {
+            std::ostringstream ss;
+            if (ii == 0) {
+                ss << "1st";
+            }
+            else if (ii == 1) {
+                ss << "2nd";
+            }
+            else if (ii == 2) {
+                ss << "3rd";
+            }
+            else if (ii > 2) {
+                ss << ii+1 << "th";
+            }
+            ss << " argument is undefined.";
+
+            isolate->ThrowException( Exception::TypeError(
+                String::NewFromUtf8(isolate, ss.str().c_str() ) ) );
+            return true;
+        }
+    }
     return false;
 }
 
-bool NodeIbapi::isWrongType( Isolate *isolate, bool predicateRes, int argId ) {
-   // Isolate* isolate = Isolate::GetCurrent();
+bool NodeIbapi::isWrongType( bool predicateRes, int argId ) {
+    Isolate* isolate = Isolate::GetCurrent();
     if ( predicateRes ) {
         std::ostringstream ss;
         ss << "Argument " << argId << " is of wrong type.";
@@ -943,6 +897,26 @@ bool NodeIbapi::isWrongType( Isolate *isolate, bool predicateRes, int argId ) {
         return true;
     } 
     return false;
+}
+
+void NodeIbapi::convertExecutionFilterForIb( Handle<Object> ibExecutionFilter,
+                                             ExecutionFilter &filter) {
+    Isolate* isolate = Isolate::GetCurrent();
+
+    filter.m_clientId = ibExecutionFilter->Get(
+            String::NewFromUtf8(isolate, "clientId") )->Int32Value();
+    filter.m_acctCode = getChar(
+            ibExecutionFilter->Get( String::NewFromUtf8(isolate, "acctCode") ));
+    filter.m_time = getChar(
+            ibExecutionFilter->Get( String::NewFromUtf8(isolate, "time") ) );
+    filter.m_symbol = getChar(
+            ibExecutionFilter->Get( String::NewFromUtf8(isolate, "symbol") ) );
+    filter.m_secType = getChar(
+            ibExecutionFilter->Get( String::NewFromUtf8(isolate, "secType") ) );
+    filter.m_exchange = getChar(
+            ibExecutionFilter->Get( String::NewFromUtf8(isolate, "exchange") ));
+    filter.m_side = getChar(
+            ibExecutionFilter->Get( String::NewFromUtf8(isolate, "side") ) );
 }
 
 void NodeIbapi::convertContractForIb( Handle<Object> ibContract,

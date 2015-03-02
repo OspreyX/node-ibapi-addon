@@ -19,13 +19,17 @@ messages are rate limited to 50 msg/sec as IB requires it.
 Default behavior is that if your outbound rate is greater than that the 
 51st message will be handled in the next second.
 
+If you would like to see the jsdoc of this project, just run it on ibapi.js
+file.
+
 ####WARNING:
 If you have legacy code from before 0.2.0, use 0.1.23 if you don't want to 
 migrate your code.
 
 ### Change Notes:
 
-* 2015-02-15 - 0.2.3  - Code cleanup and updated examples
+* 2015-03-01 - 0.2.3  - Node 0.12 & io.js 1.4.2 build compatible.
+                        Code cleanup and updated examples.
 * 2015-01-07 - 0.2.2  - More CPU efficient
 * 2014-12-29 - 0.2.1  - Uses event handlers instead of event emitters
 * 2014-11-12 - 0.1.23 - Includes lib into the package itself
