@@ -937,19 +937,19 @@ void NodeIbapi::convertExecutionFilterForIb( Handle<Object> ibExecutionFilter,
                                              ExecutionFilter &filter) {
 
     filter.m_clientId = ibExecutionFilter->Get(
-            String::NewFromUtf8(isolate, "clientId") )->Int32Value();
+            String::New( "clientId") )->Int32Value();
     filter.m_acctCode = getChar(
-            ibExecutionFilter->Get( String::NewFromUtf8(isolate, "acctCode") ));
+            ibExecutionFilter->Get( String::New( "acctCode") ) );
     filter.m_time = getChar(
-            ibExecutionFilter->Get( String::NewFromUtf8(isolate, "time") ) );
+            ibExecutionFilter->Get( String::New( "time") ) );
     filter.m_symbol = getChar(
-            ibExecutionFilter->Get( String::NewFromUtf8(isolate, "symbol") ) );
+            ibExecutionFilter->Get( String::New( "symbol") ) );
     filter.m_secType = getChar(
-            ibExecutionFilter->Get( String::NewFromUtf8(isolate, "secType") ) );
+            ibExecutionFilter->Get( String::New( "secType") ) );
     filter.m_exchange = getChar(
-            ibExecutionFilter->Get( String::NewFromUtf8(isolate, "exchange") ));
+            ibExecutionFilter->Get( String::New( "exchange") ) );
     filter.m_side = getChar(
-            ibExecutionFilter->Get( String::NewFromUtf8(isolate, "side") ) );
+            ibExecutionFilter->Get( String::New( "side") ) );
 }
 
 void NodeIbapi::convertContractForIb( Handle<Object> ibContract,
