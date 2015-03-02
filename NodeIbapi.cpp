@@ -110,7 +110,7 @@ void NodeIbapi::Connect( const FunctionCallbackInfo<Value> &args ) {
     HandleScope scope(isolate);
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
 
-    if ( isWrongArgNumber( args.Length(), 3 ) || 
+    if ( isWrongArgNumber( args, 3 ) || 
         isWrongType( !args[0]->IsString(), 0 ) ||
         isWrongType( !args[1]->IsUint32(), 1 ) || 
         isWrongType( !args[2]->IsInt32(), 2 ) ) {
@@ -168,7 +168,7 @@ void NodeIbapi::ReqMktData( const FunctionCallbackInfo<Value> &args ) {
     Isolate* isolate = Isolate::GetCurrent();
     HandleScope scope(isolate);
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
-    if ( isWrongArgNumber( args.Length(), 4 ) ) {
+    if ( isWrongArgNumber( args, 4 ) ) {
         return;
     }
 
@@ -192,7 +192,7 @@ void NodeIbapi::CancelMktData( const FunctionCallbackInfo<Value> &args ) {
     HandleScope scope(isolate);
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
 
-    if ( isWrongArgNumber( args.Length(), 1 ) ||
+    if ( isWrongArgNumber( args, 1 ) ||
          isWrongType( !args[0]->IsUint32(), 0 ) ) {
         return;
     }
@@ -247,7 +247,7 @@ void NodeIbapi::CancelOrder( const FunctionCallbackInfo<Value> &args ) {
     Isolate* isolate = Isolate::GetCurrent();
     HandleScope scope(isolate);
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
-    if ( isWrongArgNumber( args.Length(), 1 ) ||
+    if ( isWrongArgNumber( args, 1 ) ||
          isWrongType( !args[0]->IsUint32(), 0 ) ) {
         return;
     }
@@ -263,7 +263,7 @@ void NodeIbapi::ReqAccountUpdates( const FunctionCallbackInfo<Value> &args ) {
     Isolate* isolate = Isolate::GetCurrent();
     HandleScope scope(isolate);
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
-    if ( isWrongArgNumber( args.Length(), 2 ) ||
+    if ( isWrongArgNumber( args, 2 ) ||
          isWrongType( !args[0]->IsBoolean(), 0 ) ||
          isWrongType( !args[1]->IsString(), 1 ) ) {
         return;
@@ -277,7 +277,7 @@ void NodeIbapi::ReqExecutions( const FunctionCallbackInfo<Value> &args ) {
     Isolate* isolate = Isolate::GetCurrent();
     HandleScope scope(isolate);
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
-    if ( isWrongArgNumber( args.Length(), 2 ) ) {
+    if ( isWrongArgNumber( args, 2 ) ) {
         return;
     }
     int reqId = args[0]->Int32Value();
@@ -291,7 +291,7 @@ void NodeIbapi::ReqIds( const FunctionCallbackInfo<Value> &args ) {
     Isolate* isolate = Isolate::GetCurrent();
     HandleScope scope(isolate);
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
-    if ( isWrongArgNumber( args.Length(), 1 ) ) {
+    if ( isWrongArgNumber( args, 1 ) ) {
         return;
     }
     int numIds = args[0]->Int32Value();
@@ -309,7 +309,7 @@ void NodeIbapi::ReqContractDetails( const FunctionCallbackInfo<Value> &args ) {
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
     int reqId = args[0]->Int32Value();
 
-    if ( isWrongArgNumber( args.Length(), 2 ) ) {
+    if ( isWrongArgNumber( args, 2 ) ) {
         return;
     }
 
@@ -326,7 +326,7 @@ void NodeIbapi::ReqMktDepth( const FunctionCallbackInfo<Value> &args ) {
     HandleScope scope(isolate);
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
 
-    if ( isWrongArgNumber( args.Length(), 3 ) ) {
+    if ( isWrongArgNumber( args, 3 ) ) {
         return;
     }
 
@@ -347,7 +347,7 @@ void NodeIbapi::CancelMktDepth( const FunctionCallbackInfo<Value> &args ) {
     HandleScope scope(isolate);
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
 
-    if ( isWrongArgNumber( args.Length(), 1 ) ) {
+    if ( isWrongArgNumber( args, 1 ) ) {
         return;
     }
     TickerId tickerId = args[0]->Int32Value();
@@ -357,7 +357,7 @@ void NodeIbapi::ReqNewsBulletins( const FunctionCallbackInfo<Value> &args ) {
     Isolate* isolate = Isolate::GetCurrent();
     HandleScope scope(isolate);
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
-    if ( isWrongArgNumber( args.Length(), 1 ) ) {
+    if ( isWrongArgNumber( args, 1 ) ) {
         return;
     }
     bool allMsgs = args[0]->BooleanValue();
@@ -373,7 +373,7 @@ void NodeIbapi::SetServerLogLevel( const FunctionCallbackInfo<Value> &args ) {
     Isolate* isolate = Isolate::GetCurrent();
     HandleScope scope(isolate);
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
-    if ( isWrongArgNumber( args.Length(), 1 ) ) {
+    if ( isWrongArgNumber( args, 1 ) ) {
         return;
     }
     int level = args[0]->Int32Value();
@@ -383,7 +383,7 @@ void NodeIbapi::ReqAutoOpenOrders( const FunctionCallbackInfo<Value> &args ) {
     Isolate* isolate = Isolate::GetCurrent();
     HandleScope scope(isolate);
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
-    if ( isWrongArgNumber( args.Length(), 1 ) ) {
+    if ( isWrongArgNumber( args, 1 ) ) {
         return;
     }
     bool bAutoBind = args[0]->BooleanValue();
@@ -420,7 +420,7 @@ void NodeIbapi::ReqHistoricalData( const FunctionCallbackInfo<Value> &args ) {
     HandleScope scope(isolate);
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
 
-    if ( isWrongArgNumber( args.Length(), 8 ) ) {
+    if ( isWrongArgNumber( args, 8 ) ) {
         return;
     }
     TickerId id;
@@ -455,7 +455,7 @@ void NodeIbapi::ExerciseOptions( const FunctionCallbackInfo<Value> &args ) {
     HandleScope scope(isolate);
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
 
-    if ( isWrongArgNumber( args.Length(), 6 ) ) {
+    if ( isWrongArgNumber( args, 6 ) ) {
         return;
     }
     TickerId tickerId;
@@ -482,7 +482,7 @@ void NodeIbapi::CancelHistoricalData( const FunctionCallbackInfo<Value> &args ) 
     Isolate* isolate = Isolate::GetCurrent();
     HandleScope scope(isolate);
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
-    if ( isWrongArgNumber( args.Length(), 1 ) ) {
+    if ( isWrongArgNumber( args, 1 ) ) {
         return;
     }
     TickerId tickerId = args[0]->Int32Value();
@@ -492,7 +492,7 @@ void NodeIbapi::ReqRealTimeBars( const FunctionCallbackInfo<Value> &args ) {
     Isolate* isolate = Isolate::GetCurrent();
     HandleScope scope(isolate);
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
-    if ( isWrongArgNumber( args.Length(), 5 ) ) {
+    if ( isWrongArgNumber( args, 5 ) ) {
         return;
     }
 
@@ -515,7 +515,7 @@ void NodeIbapi::CancelRealTimeBars( const FunctionCallbackInfo<Value> &args ) {
     HandleScope scope(isolate);
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
 
-    if ( isWrongArgNumber( args.Length(), 1 ) ) {
+    if ( isWrongArgNumber( args, 1 ) ) {
         return;
     }
 
@@ -527,7 +527,7 @@ void NodeIbapi::CancelScannerSubscription( const FunctionCallbackInfo<Value> &ar
     HandleScope scope(isolate);
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
 
-    if ( isWrongArgNumber( args.Length(), 1 ) ) {
+    if ( isWrongArgNumber( args, 1 ) ) {
         return;
     }
 
@@ -545,7 +545,7 @@ void NodeIbapi::ReqScannerSubscription( const FunctionCallbackInfo<Value> &args 
     HandleScope scope(isolate);
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
 
-    if ( isWrongArgNumber( args.Length(), 2 ) ) {
+    if ( isWrongArgNumber( args, 2 ) ) {
         return;
     }
 
@@ -570,7 +570,7 @@ void NodeIbapi::ReqFundamentalData( const FunctionCallbackInfo<Value> &args ) {
     HandleScope scope(isolate);
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
 
-    if ( isWrongArgNumber( args.Length(), 3 ) ) {
+    if ( isWrongArgNumber( args, 3 ) ) {
         return;
     }
 
@@ -587,7 +587,7 @@ void NodeIbapi::CancelFundamentalData( const FunctionCallbackInfo<Value> &args )
     Isolate* isolate = Isolate::GetCurrent();
     HandleScope scope(isolate);
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
-    if ( isWrongArgNumber( args.Length(), 1 ) ) {
+    if ( isWrongArgNumber( args, 1 ) ) {
         return;
     }
 
@@ -598,7 +598,7 @@ void NodeIbapi::CalculateImpliedVolatility( const FunctionCallbackInfo<Value> &a
     Isolate* isolate = Isolate::GetCurrent();
     HandleScope scope(isolate);
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
-    if ( isWrongArgNumber( args.Length(), 4 ) ) {
+    if ( isWrongArgNumber( args, 4 ) ) {
         return;
     }
 
@@ -617,7 +617,7 @@ void NodeIbapi::CalculateOptionPrice( const FunctionCallbackInfo<Value> &args ) 
     Isolate* isolate = Isolate::GetCurrent();
     HandleScope scope(isolate);
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
-    if ( isWrongArgNumber( args.Length(), 4 ) ) {
+    if ( isWrongArgNumber( args, 4 ) ) {
         return;
     }
 
@@ -637,7 +637,7 @@ void NodeIbapi::CancelCalculateImpliedVolatility(
     Isolate* isolate = Isolate::GetCurrent();
     HandleScope scope(isolate);
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
-    if ( isWrongArgNumber( args.Length(), 1 ) ) {
+    if ( isWrongArgNumber( args, 1 ) ) {
         return;
     }
 
@@ -648,7 +648,7 @@ void NodeIbapi::CancelCalculateOptionPrice( const FunctionCallbackInfo<Value> &a
     Isolate* isolate = Isolate::GetCurrent();
     HandleScope scope(isolate);
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
-    if ( isWrongArgNumber( args.Length(), 1 ) ) {
+    if ( isWrongArgNumber( args, 1 ) ) {
         return;
     }
 
@@ -665,7 +665,7 @@ void NodeIbapi::ReqMarketDataType( const FunctionCallbackInfo<Value> &args ) {
     Isolate* isolate = Isolate::GetCurrent();
     HandleScope scope(isolate);
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
-    if ( isWrongArgNumber( args.Length(), 1 ) ) {
+    if ( isWrongArgNumber( args, 1 ) ) {
         return;
     }
 
@@ -688,7 +688,7 @@ void NodeIbapi::ReqAccountSummary( const FunctionCallbackInfo<Value> &args ) {
     Isolate* isolate = Isolate::GetCurrent();
     HandleScope scope(isolate);
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
-    if ( isWrongArgNumber( args.Length(), 3 ) ) {
+    if ( isWrongArgNumber( args, 3 ) ) {
         return;
     }
 
@@ -701,7 +701,7 @@ void NodeIbapi::CancelAccountSummary( const FunctionCallbackInfo<Value> &args ) 
     Isolate* isolate = Isolate::GetCurrent();
     HandleScope scope(isolate);
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
-    if ( isWrongArgNumber( args.Length(), 1 ) ) {
+    if ( isWrongArgNumber( args, 1 ) ) {
         return;
     }
 
@@ -712,7 +712,7 @@ void NodeIbapi::VerifyRequest( const FunctionCallbackInfo<Value>& args ) {
     Isolate* isolate = Isolate::GetCurrent();
     HandleScope scope(isolate);
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
-    if ( isWrongArgNumber( args.Length(), 2 ) ) {
+    if ( isWrongArgNumber( args, 2 ) ) {
         return;
     }
 
@@ -730,7 +730,7 @@ void NodeIbapi::VerifyMessage( const FunctionCallbackInfo<Value>& args ) {
     Isolate* isolate = Isolate::GetCurrent();
     HandleScope scope(isolate);
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
-    if ( isWrongArgNumber( args.Length(), 1 ) ) {
+    if ( isWrongArgNumber( args, 1 ) ) {
         return;
     }
 
@@ -747,7 +747,7 @@ void NodeIbapi::QueryDisplayGroups( const FunctionCallbackInfo<Value>& args ) {
     HandleScope scope(isolate);
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
 
-    if ( isWrongArgNumber( args.Length(), 1 ) ) {
+    if ( isWrongArgNumber( args, 1 ) ) {
         return;
     }
 
@@ -764,7 +764,7 @@ void NodeIbapi::SubscribeToGroupEvents( const FunctionCallbackInfo<Value>& args 
     HandleScope scope(isolate);
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
 
-    if ( isWrongArgNumber( args.Length(), 2 ) ) {
+    if ( isWrongArgNumber( args, 2 ) ) {
         return;
     }
 
@@ -783,7 +783,7 @@ void NodeIbapi::UpdateDisplayGroup( const FunctionCallbackInfo<Value>& args ) {
     HandleScope scope(isolate);
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
 
-    if ( isWrongArgNumber( args.Length(), 2 ) ) {
+    if ( isWrongArgNumber( args, 2 ) ) {
         return;
     }
 
@@ -802,7 +802,7 @@ void NodeIbapi::UnsubscribeFromGroupEvents( const FunctionCallbackInfo<Value>& a
     HandleScope scope(isolate);
     NodeIbapi* obj = ObjectWrap::Unwrap<NodeIbapi>( args.Holder() );
 
-    if ( isWrongArgNumber( args.Length(), 1 ) ) {
+    if ( isWrongArgNumber( args, 1 ) ) {
         return;
     }
 
@@ -851,13 +851,37 @@ char *NodeIbapi::getChar( v8::Local<v8::Value> value, const char *fallback ) {
     return str;
 }
 
-bool NodeIbapi::isWrongArgNumber( int argNumInput, int argNumExpected ) {
+bool NodeIbapi::isWrongArgNumber( const FunctionCallbackInfo<Value> &args,
+                                  int argNumExpected ) {
     Isolate* isolate = Isolate::GetCurrent();
-    if ( argNumInput != argNumExpected ) {
+    if ( args.Length() != argNumExpected ) {
         isolate->ThrowException(
             Exception::TypeError(
                 String::NewFromUtf8(isolate, "Wrong number of arguments" ) ) );
         return true;
+    }
+
+    for (int ii = 0; ii < args.Length(); ii++) {
+        if ( args[ii]->IsUndefined() ) {
+            std::ostringstream ss;
+            if (ii == 0) {
+                ss << "1st";
+            }
+            else if (ii == 1) {
+                ss << "2nd";
+            }
+            else if (ii == 2) {
+                ss << "3rd";
+            }
+            else if (ii > 2) {
+                ss << ii+1 << "th";
+            }
+            ss << " argument is undefined.";
+
+            isolate->ThrowException( Exception::TypeError(
+                String::NewFromUtf8(isolate, ss.str().c_str() ) ) );
+            return true;
+        }
     }
     return false;
 }

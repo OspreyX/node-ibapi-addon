@@ -61,8 +61,8 @@ NodeIbapi.prototype = {
     * @param {uint} port -
     * @param {int} clientId -
     */
-  connect: function (params) {
-    return this.client.connect(params);
+  connect: function (host, port, clientId) {
+    return this.client.connect(host, port, clientId);
   },
 
   /**
@@ -126,9 +126,9 @@ NodeIbapi.prototype = {
     * @param {string} genericTickType -
     * @param {bool} snapShot - 
     */
-  reqMktData: function (params) {
+  reqMktData: function (reqId, contract, genericTickType, snapShot) {
     this.doAction( function () {
-      this.client.reqMktData(params);
+      this.client.reqMktData(reqId, contract, genericTickType, snapShot);
     });
   },
 
@@ -139,9 +139,9 @@ NodeIbapi.prototype = {
     * @memberof NodeIbapi
     * @param {uint} reqId -
     */
-  cancelMktData: function (params) {
+  cancelMktData: function (reqId) {
     this.doAction( function () {
-      this.client.cancelMktData(params);
+      this.client.cancelMktData(reqId);
     });
   },
 
@@ -154,9 +154,9 @@ NodeIbapi.prototype = {
     * @param {contract} contract - 
     * @param {order} order - 
     */
-  placeOrder: function (params) {
+  placeOrder: function (orderId, contract, order) {
     this.doAction( function () {
-      this.client.placeOrder(params);
+      this.client.placeOrder(orderId, contract, order);
     });
   },
 
@@ -173,9 +173,11 @@ NodeIbapi.prototype = {
     * @param {double} price -
     * @param {double} auxPrice -
     */
-  placeSimpleOrder: function (params) {
+  placeSimpleOrder: function (orderId, contract, action, quantity, orderType,
+                              price, auxPrice) {
     this.doAction( function () {
-      this.client.placeOrder(params);
+      this.client.placeOrder(orderId, contract, action, quantity, orderType,
+                              price, auxPrice);
     });
   },
 
@@ -212,9 +214,9 @@ NodeIbapi.prototype = {
     * @param {bool} subscribe -
     * @param {string} acctCode -
     */
-  reqAccountUpdates: function (params) {
+  reqAccountUpdates: function (subscribe, acctCode) {
     this.doAction( function () {
-      this.client.reqAccountUpdates(params);
+      this.client.reqAccountUpdates(subscribe, acctCode);
     });
   },
 
@@ -229,9 +231,9 @@ NodeIbapi.prototype = {
     * @param {int} reqId -
     * @param {executionFilter} filter - see execution.js
     */
-  reqExecutions: function (params) {
+  reqExecutions: function (reqId, executionFilter) {
     this.doAction( function () {
-      this.client.reqExecutions(params);
+      this.client.reqExecutions(reqId, executionFilter);
     });
   },
 
@@ -254,9 +256,9 @@ NodeIbapi.prototype = {
     * @param {int} reqId -
     * @param {contract} contract -
     */
-  reqContractDetails: function (params) {
+  reqContractDetails: function (reqId, contract) {
     this.doAction( function () {
-      this.client.reqContractDetails(params);
+      this.client.reqContractDetails(reqId, contract);
     });
   },
 
@@ -270,9 +272,9 @@ NodeIbapi.prototype = {
     * @param {contract} contract -
     * @param {int} numRows -
     */
-  reqMktDepth: function (params) {
+  reqMktDepth: function (tickerId, contract, numRows) {
     this.doAction( function () {
-      this.client.reqMktDepth(params);
+      this.client.reqMktDepth(tickerId, contract, numRows);
     });
   },
 
@@ -379,9 +381,11 @@ NodeIbapi.prototype = {
     * @param {int} useRTH -
     * @param {int} formatDate -
     */
-  reqHistoricalData: function (params) {
+  reqHistoricalData: function (id, contract, endDateTime, durationStr,
+                               barSizeSetting, whatToShow, useRTH, formatDate) {
     this.doAction( function () {
-      this.client.reqHistoricalData(params);
+      this.client.reqHistoricalData(id, contract, endDateTime, durationStr,
+                               barSizeSetting, whatToShow, useRTH, formatDate);
     });
   },
 
@@ -395,9 +399,11 @@ NodeIbapi.prototype = {
     * @param {string} account -
     * @param {int} override -
     */
-  exerciseOptions: function (params) {
+  exerciseOptions: function (id, contract, exerciseAction,
+                              excerciseQuantity, account, override) {
     this.doAction( function () {
-      this.client.exerciseOptions(params);
+      this.client.exerciseOptions(id, contract, exerciseAction,
+                                  excerciseQuantity, account, override);
     });
   },
 
@@ -426,9 +432,9 @@ NodeIbapi.prototype = {
     * @param {string} whatToShow -
     * @param {bool} useRTH -
     */
-  reqRealtimeBars: function (params) {
+  reqRealtimeBars: function (id, contract, barSize, whatToShow, useRTH) {
     this.doAction( function () {
-      this.client.reqRealtimeBars(params);
+      this.client.reqRealtimeBars(id, contract, barSize, whatToShow, useRTH);
     });
   },
 
@@ -475,9 +481,9 @@ NodeIbapi.prototype = {
     * @param {int} tickerId -
     * @param {scannerSubscription} subscription - see scannerSubscription.js
     */
-  reqScannerSubscription: function (params) {
+  reqScannerSubscription: function (tickerId, scannerSubscription) {
     this.doAction( function () {
-      this.client.reqScannerSubscription(params);
+      this.client.reqScannerSubscription(tickerId, scannerSubscription);
     });
   },
 
@@ -494,9 +500,9 @@ NodeIbapi.prototype = {
     * @param {contract} contract -
     * @param {string} reportType -
     */
-  reqFundamentalData: function (params) {
+  reqFundamentalData: function (reqId, contract, reportType) {
     this.doAction( function () {
-      this.client.reqFundamentalData(params);
+      this.client.reqFundamentalData(reqId, contract, reportType);
     });
   },
 
@@ -522,9 +528,11 @@ NodeIbapi.prototype = {
     * @param {double} optionPrice -
     * @param {double} underPrice -
     */
-  calculateImpliedVolatility: function (params) {
+  calculateImpliedVolatility: function (reqId, contract, optionPrice,
+                                        underPrice) {
     this.doAction( function () {
-      this.client.calculateImpliedVolatility(params);
+      this.client.calculateImpliedVolatility(reqId, contract, optionPrice,
+                                        underPrice);
     });
   },
 
@@ -538,9 +546,9 @@ NodeIbapi.prototype = {
     * @param {double} volatility -
     * @param {double} underPrice -
     */
-  calculateOptionPrice: function (params) {
+  calculateOptionPrice: function (reqId, contract, volatility, underPrice) {
     this.doAction( function () {
-      this.client.calculateOptionPrice(params);
+      this.client.calculateOptionPrice(reqId, contract, volatility, underPrice);
     });
   },
 
@@ -634,9 +642,9 @@ NodeIbapi.prototype = {
     * @param {string} groupName -
     * @param {string} tags -
     */
-  reqAccountSummary: function (params) {
+  reqAccountSummary: function (reqId, groupName, tags) {
     this.doAction( function () {
-      this.client.reqAccountSummary(params);
+      this.client.reqAccountSummary(reqId, groupName, tags);
     });
   },
 
@@ -683,9 +691,9 @@ NodeIbapi.prototype = {
     * @param {int} reqId - 
     * @param {int} groupId -
     */
-  subscribeToGroupEvents: function (params) {
+  subscribeToGroupEvents: function (reqId, groupId) {
     this.doAction( function () {
-      this.client.subscribeToGroupEvents(params);
+      this.client.subscribeToGroupEvents(reqId, groupId);
     });
   },
 
@@ -696,9 +704,9 @@ NodeIbapi.prototype = {
     * @param {int} reqId -
     * @param {string} contractInfo -
     */
-  updateDisplayGroup: function (params) {
+  updateDisplayGroup: function (reqId, contractInfo) {
     this.doAction( function () {
-      this.client.updateDisplayGroup(params);
+      this.client.updateDisplayGroup(reqId, contractInfo);
     });
   },
 

@@ -918,6 +918,28 @@ bool NodeIbapi::isWrongArgNumber( const Arguments &args, int argNum ) {
                 String::New( "Wrong number of arguments" ) ) );
         return true;
     }
+    for (int ii = 0; ii < args.Length(); ii++) {
+        if ( args[ii]->IsUndefined() ) {
+            std::ostringstream ss;
+            if (ii == 0) {
+                ss << "1st";
+            }
+            else if (ii == 1) {
+                ss << "2nd";
+            }
+            else if (ii == 2) {
+                ss << "3rd";
+            }
+            else if (ii > 2) {
+                ss << ii+1 << "th";
+            }
+            ss << " argument is undefined.";
+
+            ThrowException( Exception::TypeError(
+                String::New(ss.str().c_str() ) ) );
+            return true;
+        }
+    }
     return false;
 }
 

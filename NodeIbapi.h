@@ -88,7 +88,8 @@ private:
 private:
     static char *getChar( Local<Value> value, const char *fallback = "" );
 
-    static bool isWrongArgNumber( int argNumInput, int argNumExpected );
+    static bool isWrongArgNumber( const FunctionCallbackInfo<Value>& args,
+                                    int argNumExpected );
     static bool isWrongType( bool predicateRes, int argId );
     static void convertExecutionFilterForIb( Handle<Object> ibExecutionFilter,
                                              ExecutionFilter &filter);
