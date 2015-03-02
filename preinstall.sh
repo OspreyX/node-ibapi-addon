@@ -1,12 +1,20 @@
 DIR="./import"
 LIBJSON="./libjson"
-
+rm -rf ./import
 if [ ! -d "$DIR" ]
 then
     mkdir $DIR
 fi
 
+if [ "$(node -v | cut -c 1-5)" = "v0.10" ]; then
+echo "Node 0.10 detected"
+mv ./NodeIbapiTen.cpp ./NodeIbapi.cpp
+mv ./NodeIbapiTen.h ./NodeIbapi.h
+mv ./IbJsonParserTen.cpp ./IbJsonParser.cpp
+fi
+
 cd $DIR
+rm twsapi_macunix.971.01.jar
 wget http://interactivebrokers.github.io/downloads/twsapi_macunix.971.01.jar
 unzip twsapi_macunix.971.01.jar
 cp ./IBJts/source/PosixClient/Shared/* .
@@ -42,3 +50,4 @@ sed -i 's/#warning, Release build of libjson, but NDEBUG is not on//g' ./libjson
 sed -i 's/#error, Release build of libjson, but NDEBUG is not on//g' ./libjson/_internal/Source/JSONDefs.h
 sed -i 's@#define JSON_LIBRARY@//#define JSON_LIBRARY@g' ./libjson/JSONOptions.h
 fi
+

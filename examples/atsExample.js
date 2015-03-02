@@ -1,90 +1,134 @@
-var ibapi = require('../ibapi');
-var ibcontract = ibapi.contract;
-var client = new ibapi.addon.NodeIbapi();
+// In this example, we will implement a simple currency trading application
+//  with node-ibapi-addon and kefir, a functional reactive programming module.
+// Let's say that you wanted to make an ATS that buys eur/usd on three 
+//  consecutive down ticks, and sell it on three consecutive up ticks.
 
+var addon = require('../ibapi'),
+  messageIds = addon.messageIds,
+  contract = addon.contract,
+  order = addon.order;
+var Kefir = require('kefir').Kefir;
+var api = new addon.NodeIbapi();
 var orderId = -1;
-var processIbMsg = function () {
-  client.processIbMsg();
-}
-var addReqId = function () {
-  client.addReqId(1);
-}
-var doReqFunc = function () {
-  client.doReqFunc();
-}
 
-var eurusd = ibcontract.createContract();
+var eurusd = contract.createContract();
 eurusd.symbol = 'EUR';
 eurusd.secType = 'CASH';
 eurusd.exchange = 'IDEALPRO';
 eurusd.primaryExchange = 'IDEALPRO';
 eurusd.currency = 'USD';
 
-var buyOrder = function () {
-    console.log('Next valid order Id: %d',orderId);
-    console.log("Placing order for EUR");
-    client.placeOrder(orderId, eurusd, "BUY", 100, "MKT", 0.0, 0.0);
-    orderId = orderId + 1;
-    isOrderPlaced = true;
-}
-var sellOrder = function () {
-    console.log('Next valid order Id: %d',orderId);
-    console.log("Placing order for EUR");
-    client.placeOrder(orderId, eurusd, "SELL", 100, "MKT", 1000.0, 0.0);
-    orderId = orderId + 1;
-    isOrderPlaced = true;
-}
-var subscribeEurUsd = function () {
-  client.reqMktData(1,eurusd,"165",false);
-}
-var priceVec = [];
-
-client.on('connected', function () {
-  console.log('connected');
-  setInterval(processIbMsg,0.1);
-  client.funcQueue.push(addReqId);
-})
-.once('nextValidId', function (data) {
+var buyOrder = function (data) {
+  console.log("Buying EUR");
+  api.placeSimpleOrder(orderId, eurusd, "BUY", 1000, "MKT", 0.0, 0.0);
+  orderId = orderId + 1;
+};
+var sellOrder = function (data) {
+  console.log("Selling EUR");
+  api.placeSimpleOrder(orderId, eurusd, "SELL", 1000, "MKT", 1000.0, 0.0);
+  orderId = orderId + 1;
+};
+var handleValidOrderId = function (data) {
   orderId = data.orderId;
   console.log('nextValidId: ' + orderId);
-  setInterval(doReqFunc,21);
-  client.funcQueue.push(subscribeEurUsd);
-})
-.on('tickPrice', function (tickPrice) {
+  api.reqMktData(1,eurusd,"165",false);
+};
+var printTickPrice = function (tickPrice) {
   console.log( "TickPrice: " + tickPrice.tickerId.toString() + " " + 
     tickPrice.field.toString() + " " + tickPrice.price.toString() + " " +
     tickPrice.canAutoExecute.toString());
-  // buy 
-  if (priceVec.length < 3) {
-    // push
-    priceVec.push(tickPrice.price);
-  }
-  else if (priceVec.length === 3) {
-    priceVec[0] = priceVec[1];
-    priceVec[1] = priceVec[2];
-    priceVec[2] = tickPrice.price;
+};
+var handleServerError = function (message) {
+  console.log('Error: ' + message.id.toString() + '-' +
+              message.errorCode.toString() + '-' +
+              message.errorString.toString());
+};
+var handleClientError = function (message) {
+  console.log('clientError');
+  console.log(JSON.stringify(message));
+};
 
-    // make  a buy/sell decision
-    if (priceVec[2] > priceVec[1] && priceVec[1] > priceVec[0]) {
-      // sell
-      client.funcQueue.push(sellOrder);
-    }
-    else if (priceVec[2] < priceVec[1] && priceVec[1] < priceVec[0]) {
-      // buy
-      client.funcQueue.push(buyOrder);
-    }
-  }
-})
-.on('clientError', function (clientError) {
-  console.log('Client error' + clientError.id.toString());
-})
-.on('svrError', function (svrError) {
-  console.log('Error: ' + svrError.id.toString() + ' - ' + 
-    svrError.errorCode.toString() + ' - ' + svrError.errorString.toString());
-})
-.on('disconnected', function () {
-  console.log('disconnected');
-  process.exit(1);
-})
+// Let's use kefir to compose the event handler functions
+var kemitter = Kefir.emitter();
 
-client.connectToIb('127.0.0.1',7496,0);
+// In order to do that, register all incoming messages to use kefir's emitter
+var ibapiCallback = function (data) {
+  kemitter.emit(data);
+};
+Object.keys(messageIds).forEach(function (messageId) {
+  api.handlers[messageId] = ibapiCallback;
+});
+
+//  Let's now think about how will we handle the data stream from IB:
+//
+//  [IB Data Stream]
+//       |
+//       |-->[nextValidId]-->(subscribe to eurusd)
+//       |
+//       |-->[svrError]-->(print it)
+//       |           
+//       |-->[tickPrices]-->(print it)
+//                 |
+//                 |-->[bid prices]--|
+//                 |                 |-->(midpoint price)
+//                 |-->[ask prices]--|         |
+//                                      [last three prices]
+//                                             |
+//                                             |-->(isBuySignal?)-->(buy)
+//                                             |
+//                                             |-->(isSellSignal?)-->(sell)
+//
+
+// Now, we should write some predicates for data filtering:
+var isNextValidId = function (data) {
+  return data.messageId === messageIds.nextValidId;
+};
+var isServerError = function (data) {
+  return data.messageId === messageIds.svrError;
+};
+var isTickPrice = function (data) {
+  return data.messageId === messageIds.tickPrice;
+};
+var isBid = function (data) {
+  return data.field === 1;
+};
+var isAsk = function (data) {
+  return data.field === 2;
+};
+var isBuySignal = function (buf) {
+  return (buf[2] < buf[1] && buf[1] < buf[0]);
+};
+var isSellSignal = function (buf) {
+  return (buf[2] > buf[1] && buf[1] > buf[0]);
+};
+
+// Observable for handling nextValidId - should be done only once
+var nextValidIdObs = kemitter.filter(isNextValidId);
+nextValidIdObs.onValue(handleValidOrderId);
+
+// Observable for reading tickPrices - we can further manipulate this stream 
+var tickObs = kemitter.filter(isTickPrice);
+tickObs.onValue(printTickPrice);
+
+// Observable for handling server error
+var svrErrorObs = kemitter.filter(isServerError);
+svrErrorObs.onValue(handleServerError);
+
+// Finally, we use kefir's slidingWindow to create a length 3 buffer to trade
+var bidObs = tickObs.filter(isBid);
+var askObs = tickObs.filter(isAsk);
+
+// calculate the midpoint price
+var midPointObs = Kefir.combine([bidObs, askObs], function (bid, ask) {
+  return ( bid.price + ask.price ) * 0.5;
+});
+
+var tradeSignal = midPointObs.slidingWindow(3);
+tradeSignal.filter(isBuySignal).onValue(buyOrder);
+tradeSignal.filter(isSellSignal).onValue(sellOrder);
+
+var connected = api.connect('127.0.0.1',7496,0);
+
+if (connected) {
+  api.beginProcessing();
+}

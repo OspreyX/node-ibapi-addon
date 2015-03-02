@@ -1,13 +1,12 @@
 {
   "name": "ibapi",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Interactive Brokers API addon for NodeJS ",
   "main": "ibapi.js",
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "test": "mocha",
     "preinstall": "sh preinstall.sh",
     "install": "node-gyp rebuild"
   },
@@ -58,5 +57,8 @@
   "gypfile": true,
   "bugs": {
     "url": "https://github.com/dchem/node-ibapi-addon/issues"
+  },
+  "devDependencies": {
+    "node-gyp": "^1.0.2"
   }
 }

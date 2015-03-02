@@ -11,15 +11,15 @@ class JSONNode;
 
 class IbJsonParser {
 public:
-	IbJsonParser();
-	~IbJsonParser();
+    IbJsonParser();
+    ~IbJsonParser();
 
     Handle<Object> parse(const JSONNode& n);
 private:
-	bool filterAsString( const std::string& node_name );
-	bool filterAsNumber( const std::string& node_name );
-	bool filterAsInteger( const std::string& node_name );
-	bool filterAsBoolean( const std::string& node_name );
+    bool filterAsString( const std::string& node_name );
+    bool filterAsNumber( const std::string& node_name );
+    bool filterAsInteger( const std::string& node_name );
+    bool filterAsBoolean( const std::string& node_name );
 };
 
 #endif

@@ -4,88 +4,95 @@
 #define IB_USE_STD_STRING
 
 #include <node.h>
+#include <node_object_wrap.h>
+
 #include "IbPosixClient.h"
 #include "IbJsonParser.h"
 #include "import/EWrapper.h"
 
 using namespace v8;
 
-class NodeIbapi : public node::ObjectWrap{
+class NodeIbapi : public node::ObjectWrap {
 public:
     static void Init( Handle<Object> exports );
 
 private:
-    NodeIbapi();
+    explicit NodeIbapi();
     ~NodeIbapi();
 
-    static Handle<Value> New( const Arguments& args );
-    static Handle<Value> ProcessMsg( const Arguments& args );
+    static void New( const FunctionCallbackInfo<Value>& args );
+    static Persistent<Function> constructor;
+    static void ProcessMsg( const FunctionCallbackInfo<Value>& args );
 
     // Getters
-    static Handle<Value> GetNextValidId( const Arguments& args );
+    static void GetNextValidId( const FunctionCallbackInfo<Value>& args );
 
     // EClientSocket
-    static Handle<Value> Connect( const Arguments& args );
-    static Handle<Value> Disconnect( const Arguments& args );
-    static Handle<Value> IsConnected( const Arguments& args );
-    static Handle<Value> ServerVersion( const Arguments& args );
-    static Handle<Value> TwsConnectionTime( const Arguments& args );
-    static Handle<Value> ReqMktData( const Arguments& args );
-    static Handle<Value> CancelMktData( const Arguments& args );
-    static Handle<Value> PlaceOrder( const Arguments& args );
-    static Handle<Value> CancelOrder( const Arguments& args );
-    static Handle<Value> ReqOpenOrders( const Arguments& args ); 
-    static Handle<Value> ReqAccountUpdates( const Arguments& args );
-    static Handle<Value> ReqExecutions( const Arguments& args );
-    static Handle<Value> ReqIds( const Arguments& args );
-    static Handle<Value> CheckMessages( const Arguments& args ); 
-    static Handle<Value> ReqContractDetails( const Arguments& args );
-    static Handle<Value> ReqMktDepth( const Arguments& args );
-    static Handle<Value> CancelMktDepth( const Arguments& args );
-    static Handle<Value> ReqNewsBulletins( const Arguments& args );
-    static Handle<Value> CancelNewsBulletins( const Arguments& args ); 
-    static Handle<Value> SetServerLogLevel( const Arguments& args );
-    static Handle<Value> ReqAutoOpenOrders( const Arguments& args );
-    static Handle<Value> ReqAllOpenOrders( const Arguments& args ); 
-    static Handle<Value> ReqManagedAccts( const Arguments& args ); 
-    static Handle<Value> RequestFA( const Arguments& args );
-    static Handle<Value> ReplaceFA( const Arguments& args );
-    static Handle<Value> ReqHistoricalData( const Arguments& args ); 
-    static Handle<Value> ExerciseOptions( const Arguments& args );
-    static Handle<Value> CancelHistoricalData( const Arguments& args );
-    static Handle<Value> ReqRealTimeBars( const Arguments& args );
-    static Handle<Value> CancelRealTimeBars( const Arguments& args );
-    static Handle<Value> CancelScannerSubscription( const Arguments& args );
-    static Handle<Value> ReqScannerParameters( const Arguments& args ); 
-    static Handle<Value> ReqScannerSubscription( const Arguments& args );
-    static Handle<Value> ReqCurrentTime( const Arguments& args ); 
-    static Handle<Value> ReqFundamentalData( const Arguments& args );
-    static Handle<Value> CancelFundamentalData( const Arguments& args );
-    static Handle<Value> CalculateImpliedVolatility( const Arguments& args );
-    static Handle<Value> CalculateOptionPrice( const Arguments& args );
-    static Handle<Value> CancelCalculateImpliedVolatility( const Arguments& args );
-    static Handle<Value> CancelCalculateOptionPrice( const Arguments& args );
-    static Handle<Value> ReqGlobalCancel( const Arguments& args ); 
-    static Handle<Value> ReqMarketDataType( const Arguments& args );
-    static Handle<Value> ReqPositions( const Arguments& args ); 
-    static Handle<Value> CancelPositions( const Arguments& args ); 
-    static Handle<Value> ReqAccountSummary( const Arguments& args ); 
-    static Handle<Value> CancelAccountSummary( const Arguments& args );
-    static Handle<Value> VerifyRequest( const Arguments& args );
-    static Handle<Value> VerifyMessage( const Arguments& args );
-    static Handle<Value> QueryDisplayGroups( const Arguments& args );
-    static Handle<Value> SubscribeToGroupEvents( const Arguments& args );
-    static Handle<Value> UpdateDisplayGroup( const Arguments& args );
-    static Handle<Value> UnsubscribeFromGroupEvents( const Arguments& args );
+    static void Connect( const FunctionCallbackInfo<Value>& args );
+    static void Disconnect( const FunctionCallbackInfo<Value>& args );
+    static void IsConnected( const FunctionCallbackInfo<Value>& args );
+    static void ServerVersion( const FunctionCallbackInfo<Value>& args );
+    static void TwsConnectionTime( const FunctionCallbackInfo<Value>& args );
+    static void ReqMktData( const FunctionCallbackInfo<Value>& args );
+    static void CancelMktData( const FunctionCallbackInfo<Value>& args );
+    static void PlaceOrder( const FunctionCallbackInfo<Value>& args );
+    static void CancelOrder( const FunctionCallbackInfo<Value>& args );
+    static void ReqOpenOrders( const FunctionCallbackInfo<Value>& args ); 
+    static void ReqAccountUpdates( const FunctionCallbackInfo<Value>& args );
+    static void ReqExecutions( const FunctionCallbackInfo<Value>& args );
+    static void ReqIds( const FunctionCallbackInfo<Value>& args );
+    static void CheckMessages( const FunctionCallbackInfo<Value>& args ); 
+    static void ReqContractDetails( const FunctionCallbackInfo<Value>& args );
+    static void ReqMktDepth( const FunctionCallbackInfo<Value>& args );
+    static void CancelMktDepth( const FunctionCallbackInfo<Value>& args );
+    static void ReqNewsBulletins( const FunctionCallbackInfo<Value>& args );
+    static void CancelNewsBulletins( const FunctionCallbackInfo<Value>& args ); 
+    static void SetServerLogLevel( const FunctionCallbackInfo<Value>& args );
+    static void ReqAutoOpenOrders( const FunctionCallbackInfo<Value>& args );
+    static void ReqAllOpenOrders( const FunctionCallbackInfo<Value>& args ); 
+    static void ReqManagedAccts( const FunctionCallbackInfo<Value>& args ); 
+    static void RequestFA( const FunctionCallbackInfo<Value>& args );
+    static void ReplaceFA( const FunctionCallbackInfo<Value>& args );
+    static void ReqHistoricalData( const FunctionCallbackInfo<Value>& args ); 
+    static void ExerciseOptions( const FunctionCallbackInfo<Value>& args );
+    static void CancelHistoricalData( const FunctionCallbackInfo<Value>& args );
+    static void ReqRealTimeBars( const FunctionCallbackInfo<Value>& args );
+    static void CancelRealTimeBars( const FunctionCallbackInfo<Value>& args );
+    static void CancelScannerSubscription( const FunctionCallbackInfo<Value>& args );
+    static void ReqScannerParameters( const FunctionCallbackInfo<Value>& args ); 
+    static void ReqScannerSubscription( const FunctionCallbackInfo<Value>& args );
+    static void ReqCurrentTime( const FunctionCallbackInfo<Value>& args ); 
+    static void ReqFundamentalData( const FunctionCallbackInfo<Value>& args );
+    static void CancelFundamentalData( const FunctionCallbackInfo<Value>& args );
+    static void CalculateImpliedVolatility( const FunctionCallbackInfo<Value>& args );
+    static void CalculateOptionPrice( const FunctionCallbackInfo<Value>& args );
+    static void CancelCalculateImpliedVolatility(
+        const FunctionCallbackInfo<Value>& args );
+    static void CancelCalculateOptionPrice( const FunctionCallbackInfo<Value>& args );
+    static void ReqGlobalCancel( const FunctionCallbackInfo<Value>& args ); 
+    static void ReqMarketDataType( const FunctionCallbackInfo<Value>& args );
+    static void ReqPositions( const FunctionCallbackInfo<Value>& args ); 
+    static void CancelPositions( const FunctionCallbackInfo<Value>& args ); 
+    static void ReqAccountSummary( const FunctionCallbackInfo<Value>& args ); 
+    static void CancelAccountSummary( const FunctionCallbackInfo<Value>& args );
+    static void VerifyRequest( const FunctionCallbackInfo<Value>& args );
+    static void VerifyMessage( const FunctionCallbackInfo<Value>& args );
+    static void QueryDisplayGroups( const FunctionCallbackInfo<Value>& args );
+    static void SubscribeToGroupEvents( const FunctionCallbackInfo<Value>& args );
+    static void UpdateDisplayGroup( const FunctionCallbackInfo<Value>& args );
+    static void UnsubscribeFromGroupEvents( const FunctionCallbackInfo<Value>& args );
 
     // events
-    static Handle<Value> GetInboundMsg( const Arguments& args );
+    static void GetInboundMsg( const FunctionCallbackInfo<Value>& args );
 
 private:
     static char *getChar( Local<Value> value, const char *fallback = "" );
 
-    static bool isWrongArgNumber( const Arguments& args, int argNum );
+    static bool isWrongArgNumber( const FunctionCallbackInfo<Value>& args,
+                                    int argNumExpected );
     static bool isWrongType( bool predicateRes, int argId );
+    static void convertExecutionFilterForIb( Handle<Object> ibExecutionFilter,
+                                             ExecutionFilter &filter);
     static void convertContractForIb( Handle<Object> ibContract, 
                                       Contract &contract );
     static void convertSubForIb( Handle<Object> scannerSub, 

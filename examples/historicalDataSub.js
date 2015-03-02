@@ -26,7 +26,7 @@ var subscribeMsft = function () {
   setImmediate(
     api.reqHistoricalData.bind(api, 1, msftContract, "20131001 00:00:00",
       "10 D", "1 hour", "MIDPOINT", "1", "1"));
-}
+};
 
 var handleValidOrderId = function (message) {
   orderId = message.orderId;
@@ -57,7 +57,7 @@ var handleHistData = function (data) {
   }
   // Or you can just stringify it:
   //  console.log(JSON.stringify(histData));
-}
+};
 
 api.handlers[messageIds.nextValidId] = handleValidOrderId;
 api.handlers[messageIds.svrError] = handleServerError;

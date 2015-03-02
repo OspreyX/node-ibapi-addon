@@ -23,11 +23,11 @@ var placeThatOrder = function () {
     orderId = orderId + 1;
     setImmediate(api.placeSimpleOrder.bind(
       api, oldId, msftContract, "BUY", 1000, "LMT", 0.11, 0.11));
-}
+};
 var cancelPrevOrder = function (prevOrderId) {
   console.log('canceling order: %d', prevOrderId);
   setImmediate(api.cancelOrder.bind(api, prevOrderId));
-}
+};
 
 var handleValidOrderId = function (message) {
   orderId = message.orderId;
