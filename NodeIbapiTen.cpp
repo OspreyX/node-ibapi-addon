@@ -328,13 +328,8 @@ Handle<Value> NodeIbapi::ReqExecutions( const Arguments &args ) {
     }
     int reqId = args[0]->Int32Value();
     ExecutionFilter filter;
-    filter.m_clientId = args[1]->Int32Value();
-    filter.m_acctCode = getChar( args[2] );
-    filter.m_time = getChar( args[3] );
-    filter.m_symbol = getChar( args[4] );
-    filter.m_secType = getChar( args[5] );
-    filter.m_exchange = getChar( args[6] );
-    filter.m_side = getChar( args[7] );
+    Handle<Object> ibExecutionFilter = Handle<Object>::Cast( args[1] );
+    convertExecutionFilterForIb(ibExecutionFilter, filter);
 
     obj->m_client.reqExecutions( reqId, filter );
     return scope.Close( Undefined() );
@@ -936,6 +931,25 @@ bool NodeIbapi::isWrongType( bool predicateRes, int argId ) {
         return true;
     } 
     return false;
+}
+
+void NodeIbapi::convertExecutionFilterForIb( Handle<Object> ibExecutionFilter,
+                                             ExecutionFilter &filter) {
+
+    filter.m_clientId = ibExecutionFilter->Get(
+            String::NewFromUtf8(isolate, "clientId") )->Int32Value();
+    filter.m_acctCode = getChar(
+            ibExecutionFilter->Get( String::NewFromUtf8(isolate, "acctCode") ));
+    filter.m_time = getChar(
+            ibExecutionFilter->Get( String::NewFromUtf8(isolate, "time") ) );
+    filter.m_symbol = getChar(
+            ibExecutionFilter->Get( String::NewFromUtf8(isolate, "symbol") ) );
+    filter.m_secType = getChar(
+            ibExecutionFilter->Get( String::NewFromUtf8(isolate, "secType") ) );
+    filter.m_exchange = getChar(
+            ibExecutionFilter->Get( String::NewFromUtf8(isolate, "exchange") ));
+    filter.m_side = getChar(
+            ibExecutionFilter->Get( String::NewFromUtf8(isolate, "side") ) );
 }
 
 void NodeIbapi::convertContractForIb( Handle<Object> ibContract,
